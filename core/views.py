@@ -1,5 +1,6 @@
 """Vues publiques du socle commun."""
 from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -38,6 +39,20 @@ class PrivacyView(TemplateView):
 
 class TermsView(TemplateView):
     template_name = "core/legal/terms.html"
+
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin-technique/",
+        "Disallow: /gestion/",
+        "Disallow: /espace-parent/",
+        "Disallow: /espace-repetiteur/",
+        "Disallow: /mon-compte/",
+        "Disallow: /notifications/",
+        f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
+    ]
+    return HttpResponse("\n".join(lines) + "\n", content_type="text/plain")
 
 
 def page_not_found(request, exception):

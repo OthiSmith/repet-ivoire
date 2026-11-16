@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+{% with current=request.resolver_match.url_name %}
+<section class="section pt-4">
+  <div class="container-xl">
+    <div class="row g-4">
+      <aside class="col-12 col-lg-2">
+        <p class="small text-muted text-uppercase fw-semibold mb-2">Gestion</p>
+        <nav class="nav flex-lg-column bo-nav gap-1" aria-label="Back-office">
+          <a class="nav-link {% if current == 'dashboard' %}active{% endif %}" href="{% url 'backoffice:dashboard' %}"><i class="bi bi-speedometer2 me-1" aria-hidden="true"></i> Tableau de bord</a>
+          <a class="nav-link {% if current == 'request_list' or current == 'request_detail' %}active{% endif %}" href="{% url 'backoffice:request_list' %}"><i class="bi bi-inbox me-1" aria-hidden="true"></i> Demandes</a>
+          <a class="nav-link {% if current == 'tutor_list' or current == 'tutor_review' %}active{% endif %}" href="{% url 'backoffice:tutor_list' %}"><i class="bi bi-mortarboard me-1" aria-hidden="true"></i> Répétiteurs</a>
+          {% if user.is_superuser %}<a class="nav-link" href="{% url 'admin:index' %}"><i class="bi bi-tools me-1" aria-hidden="true"></i> Admin technique</a>{% endif %}
+        </nav>
+      </aside>
+      <div class="col-12 col-lg-10">
+        {% block bo_content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endwith %}
+{% endblock %}

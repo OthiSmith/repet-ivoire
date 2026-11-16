@@ -1,0 +1,19 @@
+{% extends "accounts/base_auth.html" %}
+{% block title %}Mon compte — {{ SITE_NAME }}{% endblock %}
+{% block auth_title %}Mon compte{% endblock %}
+{% block auth_subtitle %}<p class="text-muted mb-0">{{ user.get_role_display }}</p>{% endblock %}
+
+{% block auth_body %}
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit" class="btn btn-primary w-100">Enregistrer</button>
+</form>
+{% endblock %}
+
+{% block auth_footer %}
+<div class="d-flex justify-content-between mt-3">
+  <a href="{% url 'accounts:dashboard' %}"><i class="bi bi-arrow-left" aria-hidden="true"></i> Mon espace</a>
+  <a href="{% url 'accounts:password_change' %}">Changer mon mot de passe</a>
+</div>
+{% endblock %}

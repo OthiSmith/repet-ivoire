@@ -3,9 +3,20 @@
 Plateforme web de mise en relation entre parents et répétiteurs à domicile en Côte d'Ivoire.
 Application Django (templates côté serveur, Bootstrap 5), compatible SQLite (local) et PostgreSQL (production).
 
-> **État du projet : phase 2 (initialisation) terminée.**
-> Le socle technique est en place : configuration, modèle utilisateur, gabarit de base, page d'accueil provisoire, tests.
-> L'authentification (phase 3), les profils (phase 4) et la mise en relation (phase 5) arrivent ensuite.
+> **État du projet : phases 3 à 6 en place (version de travail, pas encore en production).**
+> Inscription et connexion (e-mail ou téléphone), profils répétiteurs avec justificatifs privés et vérification,
+> demandes des parents, propositions et choix du répétiteur, notifications internes, back-office `/gestion/`,
+> pages publiques par commune, FAQ et pages légales (textes à compléter et à faire relire).
+> Restent à faire : mise en ligne, avis, paiement mobile, notifications SMS/WhatsApp.
+
+## Parcours
+
+1. **Le répétiteur** s'inscrit, complète son profil, ajoute sa pièce d'identité et son diplôme, puis envoie le tout pour vérification.
+2. **L'équipe** (`/gestion/`) valide le profil ou le renvoie avec les éléments à corriger.
+3. **Le parent** s'inscrit et décrit son besoin : classe, matières, commune, disponibilités.
+4. **L'équipe** voit les répétiteurs vérifiés qui correspondent et en propose jusqu'à 3.
+5. **Chaque répétiteur** accepte ou refuse sous 48 h.
+6. **Le parent** choisit parmi ceux qui ont accepté. Les coordonnées ne sont révélées aux deux parties qu'à ce moment-là.
 
 ---
 
@@ -53,7 +64,18 @@ python manage.py runserver
 ```
 
 Ouvrir ensuite **http://127.0.0.1:8000/** dans le navigateur.
-L'administration technique se trouve sur **http://127.0.0.1:8000/admin-technique/**.
+Le back-office de l'équipe se trouve sur **http://127.0.0.1:8000/gestion/**,
+l'administration technique sur **http://127.0.0.1:8000/admin-technique/**.
+
+### Données de démonstration (local uniquement)
+
+```bash
+python manage.py seed_demo
+```
+
+Crée un administrateur (`admin@demo.ci`), un parent (`parent@demo.ci`), quatre répétiteurs
+(`repetiteur1@demo.ci` … `repetiteur4@demo.ci`) et une demande. Mot de passe commun : `Demo!2026`.
+La commande refuse de s'exécuter si `DEBUG=False`.
 
 > Si PowerShell refuse d'activer l'environnement (« l'exécution de scripts est désactivée »), exécuter une fois :
 > `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
@@ -95,7 +117,7 @@ plateforme-repetiteurs/
 ├── core/                 Socle commun : pages publiques, validateurs, gabarits partagés
 ├── accounts/             Modèle utilisateur (e-mail + téléphone + rôle), comptes parents
 ├── catalog/              Matières et niveaux scolaires
-├── locations/            District → Région → Ville → Commune → Quartier
+├── locations/            Ville → Commune (quartier saisi librement), pages publiques par commune
 ├── tutors/               Profils répétiteurs, justificatifs, disponibilités
 ├── tutoring/             Demandes, propositions, mises en relation
 ├── notifications/        Notifications internes (canaux externes plus tard)
@@ -142,3 +164,10 @@ python manage.py collectstatic
 ```
 
 Prérequis : `DEBUG=False`, `ALLOWED_HOSTS` renseigné, PostgreSQL, HTTPS.
+
+À prévoir aussi :
+
+- **Photos des répétiteurs (`media/`)** : Django ne les sert pas quand `DEBUG=False`. Les faire servir par le serveur web (Nginx…) ou un stockage objet. Ne **jamais** exposer `private_media/`.
+- **Expiration des propositions** : planifier `python manage.py expire_proposals` toutes les heures. Les tableaux de bord la déclenchent aussi au passage.
+- **E-mails** : configurer le SMTP dans `.env`, puis ajouter `notifications.channels.EmailChannel` à `NOTIFICATION_CHANNELS`.
+- **Mentions légales** : renseigner les variables `LEGAL_*` et faire relire les pages légales par un juriste.

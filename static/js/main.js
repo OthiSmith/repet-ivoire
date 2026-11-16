@@ -3,7 +3,7 @@
   "use strict";
 
   // Ferme automatiquement le menu mobile après un clic sur un lien d'ancre.
-  document.querySelectorAll(".site-navbar .nav-link[href^='#']").forEach(function (link) {
+  document.querySelectorAll(".site-navbar .nav-link[href*='#']").forEach(function (link) {
     link.addEventListener("click", function () {
       var menu = document.getElementById("mainNav");
       if (menu && menu.classList.contains("show") && window.bootstrap) {

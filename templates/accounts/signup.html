@@ -1,0 +1,21 @@
+{% extends "accounts/base_auth.html" %}
+{% block title %}{% if is_tutor_signup %}Devenir répétiteur{% else %}Inscription parent{% endif %} — {{ SITE_NAME }}{% endblock %}
+{% block auth_title %}{% if is_tutor_signup %}Devenir répétiteur{% else %}Créer mon compte parent{% endif %}{% endblock %}
+{% block auth_subtitle %}
+  <p class="text-muted mb-0">
+    {% if is_tutor_signup %}Créez votre compte, puis complétez votre profil et vos justificatifs pour être vérifié.
+    {% else %}Créez votre compte, puis décrivez le besoin de votre enfant.{% endif %}
+  </p>
+{% endblock %}
+
+{% block auth_body %}
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form }}
+  <button type="submit" class="btn {% if is_tutor_signup %}btn-primary{% else %}btn-accent{% endif %} w-100">Créer mon compte</button>
+</form>
+{% endblock %}
+
+{% block auth_footer %}
+<p class="text-center text-muted mt-3">Déjà inscrit ? <a href="{% url 'accounts:login' %}">Connectez-vous</a></p>
+{% endblock %}

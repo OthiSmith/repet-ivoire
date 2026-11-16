@@ -1,0 +1,18 @@
+{% extends "accounts/base_auth.html" %}
+{% block title %}Connexion — {{ SITE_NAME }}{% endblock %}
+{% block auth_title %}Connexion{% endblock %}
+{% block auth_subtitle %}<p class="text-muted mb-0">Heureux de vous revoir.</p>{% endblock %}
+
+{% block auth_body %}
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form }}
+  <input type="hidden" name="next" value="{{ next }}">
+  <button type="submit" class="btn btn-primary w-100">Se connecter</button>
+</form>
+<p class="text-center small mt-3 mb-0"><a href="{% url 'accounts:password_reset' %}">Mot de passe oublié ?</a></p>
+{% endblock %}
+
+{% block auth_footer %}
+<p class="text-center text-muted mt-3">Pas encore de compte ? <a href="{% url 'accounts:signup' %}">Inscrivez-vous</a></p>
+{% endblock %}

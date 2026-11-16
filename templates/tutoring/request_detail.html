@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Demande pour {{ tutoring_request.child_first_name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width: 900px;">
+    <a href="{% url 'tutoring:parent_dashboard' %}" class="d-inline-block mb-3"><i class="bi bi-arrow-left" aria-hidden="true"></i> Mon espace</a>
+    <div class="d-flex justify-content-between align-items-start gap-2 mb-4">
+      <h1 class="h3 mb-0">{{ tutoring_request.child_first_name }} · {{ tutoring_request.level }}</h1>
+      {% include "partials/status_badge.html" with value=tutoring_request.status label=tutoring_request.get_status_display %}
+    </div>
+
+    {# ---------- Répétiteur choisi ---------- #}
+    {% if chosen %}
+      <div class="card p-4 mb-4 border-success">
+        <h2 class="h5 text-success mb-3"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> Votre répétiteur</h2>
+        {% include "tutoring/partials/tutor_public_card.html" with tutor=chosen.tutor %}
+        <hr>
+        <p class="fw-semibold mb-2">Contactez {{ chosen.tutor.user.first_name }} pour organiser le premier cours :</p>
+        <div class="d-flex flex-column flex-sm-row gap-2">
+          <a href="tel:{{ chosen.tutor.user.phone }}" class="btn btn-primary"><i class="bi bi-telephone" aria-hidden="true"></i> {{ chosen.tutor.user.phone }}</a>
+          <a href="mailto:{{ chosen.tutor.user.email }}" class="btn btn-outline-light-blue"><i class="bi bi-envelope" aria-hidden="true"></i> {{ chosen.tutor.user.email }}</a>
+        </div>
+      </div>
+    {% endif %}
+
+    {# ---------- Propositions à choisir ---------- #}
+    {% if tutoring_request.is_open %}
+      <h2 class="h5">Répétiteurs proposés</h2>
+      {% for proposal in accepted_proposals %}
+        <div class="card p-4 mb-3">
+          {% include "tutoring/partials/tutor_public_card.html" with tutor=proposal.tutor %}
+          {% if proposal.tutor_message %}<blockquote class="small bg-blue-light rounded p-3 mt-3 mb-0">« {{ proposal.tutor_message }} »</blockquote>{% endif %}
+          <form method="post" action="{% url 'tutoring:proposal_choose' proposal.pk %}" class="mt-3">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-accent">Choisir {{ proposal.tutor.user.first_name }}</button>
+          </form>
+        </div>
+      {% empty %}
+        <div class="card p-4 mb-3 text-muted">
+          {% if pending_count %}
+            <i class="bi bi-hourglass-split" aria-hidden="true"></i> Nous avons contacté {{ pending_count }} répétiteur{{ pending_count|pluralize }} : vous serez prévenu dès qu'ils auront confirmé leur disponibilité.
+          {% else %}
+            <i class="bi bi-search" aria-hidden="true"></i> Notre équipe recherche les répétiteurs les plus adaptés. Vous serez prévenu dès qu'une proposition sera prête.
+          {% endif %}
+        </div>
+      {% endfor %}
+      {% if accepted_proposals and pending_count %}<p class="small text-muted">{{ pending_count }} autre{{ pending_count|pluralize }} répétiteur{{ pending_count|pluralize }} n'{{ pending_count|pluralize:"a,ont" }} pas encore répondu.</p>{% endif %}
+    {% endif %}
+
+    {# ---------- Récapitulatif ---------- #}
+    <div class="card p-4 mt-4">
+      <h2 class="h6 mb-3">Votre demande</h2>
+      {% include "tutoring/partials/request_summary.html" with req=tutoring_request show_neighborhood=True %}
+    </div>
+
+    {% if tutoring_request.is_open %}
+      <form method="post" action="{% url 'tutoring:request_cancel' tutoring_request.pk %}" class="mt-3"
+            onsubmit="return confirm('Annuler cette demande ?');">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link text-danger px-0">Annuler ma demande</button>
+      </form>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

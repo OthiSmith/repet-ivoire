@@ -1,0 +1,10 @@
+{% load humanize %}
+<dl class="row dl-compact mb-0">
+  <dt class="col-sm-4">Classe</dt><dd class="col-sm-8">{{ req.level }}{% if req.level.exam %} (préparation {{ req.level.exam }}){% endif %}</dd>
+  <dt class="col-sm-4">Matières</dt><dd class="col-sm-8">{{ req.subjects.all|join:", " }}</dd>
+  <dt class="col-sm-4">Lieu</dt><dd class="col-sm-8">{{ req.commune }}{% if show_neighborhood %} — {{ req.neighborhood }}{% endif %}</dd>
+  <dt class="col-sm-4">Rythme</dt><dd class="col-sm-8">{{ req.sessions_per_week }} séance{{ req.sessions_per_week|pluralize }} par semaine</dd>
+  <dt class="col-sm-4">Disponibilités</dt><dd class="col-sm-8">{{ req.availability|linebreaksbr }}</dd>
+  {% if req.goals %}<dt class="col-sm-4">Objectifs</dt><dd class="col-sm-8">{{ req.goals|linebreaksbr }}</dd>{% endif %}
+  {% if req.budget_monthly %}<dt class="col-sm-4">Budget indicatif</dt><dd class="col-sm-8">{{ req.budget_monthly|intcomma }} FCFA / mois</dd>{% endif %}
+</dl>

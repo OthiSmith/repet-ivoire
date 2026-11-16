@@ -1,0 +1,99 @@
+{% extends "backoffice/base_backoffice.html" %}
+{% block title %}Demande n° {{ tutoring_request.pk }} — Gestion — {{ SITE_NAME }}{% endblock %}
+
+{% block bo_content %}
+{% with req=tutoring_request %}
+<a href="{% url 'backoffice:request_list' %}" class="d-inline-block mb-3"><i class="bi bi-arrow-left" aria-hidden="true"></i> Demandes</a>
+<div class="d-flex justify-content-between align-items-start gap-2 mb-4">
+  <div>
+    <h1 class="h3 mb-1">{{ req.child_first_name }} · {{ req.level }} · {{ req.commune }}</h1>
+    <div class="small text-muted">Demande n° {{ req.pk }} du {{ req.created_at|date:"j F Y à H\hi" }}</div>
+  </div>
+  {% include "partials/status_badge.html" with value=req.status label=req.get_status_display %}
+</div>
+
+<div class="row g-4">
+  <div class="col-12 col-xl-7">
+    {# ---------- Propositions ---------- #}
+    <div class="card p-4 mb-4">
+      <h2 class="h6 mb-3">Propositions</h2>
+      {% for proposal in proposals %}
+        <div class="d-flex justify-content-between align-items-center border-top py-2 gap-2">
+          <div>
+            <a href="{% url 'backoffice:tutor_review' proposal.tutor.pk %}" class="fw-semibold">{{ proposal.tutor }}</a>
+            <div class="small text-muted">
+              Proposé le {{ proposal.created_at|date:"j M à H\hi" }}
+              {% if proposal.status == "PENDING" %} · réponse attendue avant le {{ proposal.expires_at|date:"j M à H\hi" }}{% endif %}
+            </div>
+            {% if proposal.tutor_message %}<div class="small fst-italic">« {{ proposal.tutor_message }} »</div>{% endif %}
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            {% include "partials/status_badge.html" with value=proposal.status label=proposal.get_status_display %}
+            {% if proposal.status == "PENDING" or proposal.status == "ACCEPTED" %}
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="withdraw">
+                <input type="hidden" name="proposal" value="{{ proposal.pk }}">
+                <button type="submit" class="btn btn-sm btn-outline-danger" title="Retirer la proposition" aria-label="Retirer la proposition de {{ proposal.tutor }}"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p class="text-muted small mb-0">Aucun répétiteur proposé pour l'instant.</p>
+      {% endfor %}
+    </div>
+
+    {# ---------- Suggestions ---------- #}
+    {% if req.is_open %}
+      <div class="card p-4">
+        <h2 class="h6 mb-1">Répétiteurs suggérés</h2>
+        <p class="small text-muted">Vérifiés et disponibles, qui enseignent en {{ req.level }} à {{ req.commune.name }} et au moins une des matières demandées.</p>
+        {% for tutor in suggestions %}
+          <div class="d-flex justify-content-between align-items-center border-top py-2 gap-2">
+            <div>
+              <a href="{% url 'backoffice:tutor_review' tutor.pk %}" class="fw-semibold">{{ tutor }}</a>
+              <div class="small text-muted">{{ tutor.matching_subjects }} matière{{ tutor.matching_subjects|pluralize }} en commun · {{ tutor.experience_years }} an{{ tutor.experience_years|pluralize }} d'expérience</div>
+            </div>
+            <form method="post">
+              {% csrf_token %}
+              <input type="hidden" name="action" value="propose">
+              <input type="hidden" name="tutor" value="{{ tutor.pk }}">
+              <button type="submit" class="btn btn-sm btn-primary">Proposer</button>
+            </form>
+          </div>
+        {% empty %}
+          <p class="text-muted small mb-0">Aucun répétiteur ne correspond exactement. Élargissez la recherche depuis la liste des répétiteurs, ou recrutez dans cette zone.</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="col-12 col-xl-5">
+    <div class="card p-4 mb-4">
+      <h2 class="h6 mb-3">Famille</h2>
+      <p class="mb-1 fw-semibold">{{ req.parent.get_full_name }}</p>
+      <p class="small mb-0"><a href="tel:{{ req.parent.phone }}">{{ req.parent.phone }}</a> · <a href="mailto:{{ req.parent.email }}">{{ req.parent.email }}</a></p>
+    </div>
+    <div class="card p-4 mb-4">
+      <h2 class="h6 mb-3">Besoin</h2>
+      {% include "tutoring/partials/request_summary.html" with show_neighborhood=True %}
+    </div>
+    <form method="post" class="card p-4 mb-4">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="notes">
+      <label for="admin_notes" class="form-label">Notes internes</label>
+      <textarea id="admin_notes" name="admin_notes" rows="3" class="form-control mb-2">{{ req.admin_notes }}</textarea>
+      <button type="submit" class="btn btn-sm btn-outline-light-blue">Enregistrer les notes</button>
+    </form>
+    {% if req.status != "CLOSED" and req.status != "CANCELLED" %}
+      <form method="post" onsubmit="return confirm('Clôturer cette demande ? Les propositions en cours seront retirées.');">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="close">
+        <button type="submit" class="btn btn-link text-danger px-0">Clôturer la demande</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "backoffice/base_backoffice.html" %}
+{% block title %}Répétiteurs — Gestion — {{ SITE_NAME }}{% endblock %}
+
+{% block bo_content %}
+<h1 class="h3 mb-3">Répétiteurs</h1>
+{% include "backoffice/partials/status_filter.html" %}
+<form method="get" class="d-flex gap-2 mb-3" role="search">
+  <input type="hidden" name="statut" value="{{ current_status }}">
+  <input type="search" name="q" value="{{ request.GET.q }}" class="form-control" placeholder="Nom, e-mail ou téléphone" aria-label="Rechercher">
+  <button type="submit" class="btn btn-primary">Rechercher</button>
+</form>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th>Nom</th><th>Téléphone</th><th>Statut</th><th>Soumis</th></tr></thead>
+      <tbody>
+        {% for profile in tutors %}
+          <tr>
+            <td><a href="{% url 'backoffice:tutor_review' profile.pk %}" class="fw-semibold">{{ profile }}</a></td>
+            <td class="text-nowrap">{{ profile.user.phone }}</td>
+            <td>{% include "partials/status_badge.html" with value=profile.status label=profile.get_status_display %}</td>
+            <td class="small text-muted text-nowrap">{{ profile.submitted_at|date:"j M Y"|default:"—" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="4" class="text-muted text-center py-4">Aucun répétiteur.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% include "partials/pagination.html" %}
+{% endblock %}

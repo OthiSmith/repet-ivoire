@@ -1,0 +1,8 @@
+{% extends "accounts/base_auth.html" %}
+{% block title %}Connexion bloquée — {{ SITE_NAME }}{% endblock %}
+{% block auth_title %}Connexion temporairement bloquée{% endblock %}
+
+{% block auth_body %}
+<p>Trop de tentatives de connexion ont échoué. Par sécurité, la connexion à ce compte est bloquée pendant 30 minutes.</p>
+<a href="{% url 'accounts:password_reset' %}" class="btn btn-primary w-100">J'ai oublié mon mot de passe</a>
+{% endblock %}

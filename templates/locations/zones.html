@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Zones couvertes — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Répétiteurs à domicile à Abidjan (Cocody, Yopougon, Abobo…) et dans les grandes villes de Côte d'Ivoire.{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="text-center mb-4 mb-lg-5">
+      <h1 class="section-title">Zones couvertes</h1>
+      <p class="text-muted mb-0">Choisissez votre commune pour voir les répétiteurs vérifiés près de chez vous.</p>
+    </div>
+    {% for city in cities %}
+      {% if city.communes.all %}
+        <h2 class="h5 mt-4">{{ city.name }}</h2>
+        <div class="row g-2">
+          {% for commune in city.communes.all %}
+            <div class="col-6 col-md-4 col-lg-3">
+              <a href="{{ commune.get_absolute_url }}" class="card card-hover p-3 h-100 text-decoration-none text-reset d-flex flex-column">
+                <span class="fw-semibold">{{ commune.name }}</span>
+                <span class="small text-muted">{% if commune.tutor_count %}{{ commune.tutor_count }} répétiteur{{ commune.tutor_count|pluralize }} vérifié{{ commune.tutor_count|pluralize }}{% else %}Recrutement en cours{% endif %}</span>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

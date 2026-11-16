@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Inscription — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width: 860px;">
+    <div class="text-center mb-4 mb-lg-5">
+      <h1 class="section-title">Créer un compte</h1>
+      <p class="text-muted mb-0">Gratuit, en moins de deux minutes.</p>
+    </div>
+    <div class="row g-3 g-lg-4">
+      <div class="col-12 col-md-6">
+        <a href="{% url 'accounts:signup_parent' %}" class="card card-hover h-100 p-4 text-decoration-none text-reset d-flex flex-column">
+          <span class="icon-bubble mb-3"><i class="bi bi-people" aria-hidden="true"></i></span>
+          <h2 class="h5">Je suis parent</h2>
+          <p class="text-muted">Je cherche un répétiteur pour mon enfant.</p>
+          <span class="btn btn-accent mt-auto">Trouver un répétiteur</span>
+        </a>
+      </div>
+      <div class="col-12 col-md-6">
+        <a href="{% url 'accounts:signup_tutor' %}" class="card card-hover h-100 p-4 text-decoration-none text-reset d-flex flex-column">
+          <span class="icon-bubble mb-3"><i class="bi bi-mortarboard" aria-hidden="true"></i></span>
+          <h2 class="h5">Je suis répétiteur</h2>
+          <p class="text-muted">Je veux proposer des cours à domicile.</p>
+          <span class="btn btn-primary mt-auto">Devenir répétiteur</span>
+        </a>
+      </div>
+    </div>
+    <p class="text-center text-muted mt-4">Déjà inscrit ? <a href="{% url 'accounts:login' %}">Connectez-vous</a></p>
+  </div>
+</section>
+{% endblock %}

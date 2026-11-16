@@ -37,6 +37,8 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    "django.contrib.sitemaps",
+    "django.forms",  # gabarits de widgets pour le rendu Bootstrap des formulaires
 ]
 
 THIRD_PARTY_APPS = [
@@ -86,10 +88,14 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "core.context_processors.site",
+                "notifications.context_processors.unread_notifications",
             ],
         },
     },
 ]
+
+# Tous les formulaires sont rendus avec les gabarits Bootstrap de templates/forms/.
+FORM_RENDERER = "core.forms.BootstrapFormRenderer"
 
 # ---------------------------------------------------------------------------
 # Base de données
@@ -109,7 +115,7 @@ AUTH_USER_MODEL = "accounts.User"
 
 AUTHENTICATION_BACKENDS = [
     "axes.backends.AxesStandaloneBackend",
-    "django.contrib.auth.backends.ModelBackend",
+    "accounts.backends.EmailOrPhoneBackend",
 ]
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -120,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LOGIN_URL = "/connexion/"
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/mon-espace/"
 LOGOUT_REDIRECT_URL = "/"
 
 # Sessions : expiration après 2 semaines, cookie inaccessible au JavaScript.
@@ -134,6 +140,7 @@ AXES_FAILURE_LIMIT = 5
 AXES_COOLOFF_TIME = 0.5  # heures
 AXES_LOCKOUT_PARAMETERS = [["username", "ip_address"]]
 AXES_RESET_ON_SUCCESS = True
+AXES_LOCKOUT_TEMPLATE = "accounts/lockout.html"
 
 # ---------------------------------------------------------------------------
 # Internationalisation
@@ -184,6 +191,8 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Répét'Ivoire <no-reply
 # Paramètres métier de la plateforme
 # ---------------------------------------------------------------------------
 SITE_NAME = "Répét'Ivoire"
+# Adresse publique du site, utilisée dans les e-mails (sans « / » final).
+SITE_URL = env("SITE_URL", default="http://127.0.0.1:8000")
 CONTACT_EMAIL = env("CONTACT_EMAIL", default="contact@repetivoire.local")
 CONTACT_PHONE = env("CONTACT_PHONE", default="")
 # Numéro WhatsApp affiché sur le site (bouton flottant). Vide = bouton masqué.
@@ -207,8 +216,9 @@ TUTOR_RESPONSE_DELAY_HOURS = 48
 # Nombre maximum de répétiteurs proposés par demande et par tour.
 MAX_PROPOSALS_PER_ROUND = 3
 
-# Canaux de notification actifs (e-mail, SMS, WhatsApp ajoutables plus tard).
-NOTIFICATION_CHANNELS = ["notifications.channels.InAppChannel"]
+# Canaux de notification actifs. Ajouter "notifications.channels.EmailChannel"
+# une fois le SMTP configuré ; SMS et WhatsApp pourront suivre le même modèle.
+NOTIFICATION_CHANNELS = env.list("NOTIFICATION_CHANNELS", default=["notifications.channels.InAppChannel"])
 
 # ---------------------------------------------------------------------------
 # Journalisation

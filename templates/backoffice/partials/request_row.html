@@ -1,0 +1,9 @@
+<a href="{% url 'backoffice:request_detail' req.pk %}" class="card card-hover p-3 mb-2 text-decoration-none text-reset">
+  <div class="d-flex justify-content-between align-items-start gap-2">
+    <div>
+      <div class="fw-semibold">{{ req.child_first_name }} · {{ req.level }} · {{ req.commune }}</div>
+      <div class="small text-muted">{{ req.parent.get_full_name }} · {{ req.created_at|date:"j F Y" }}{% if show_counts %} · {{ req.accepted }} acceptée{{ req.accepted|pluralize }}, {{ req.pending }} en attente{% endif %}</div>
+    </div>
+    {% include "partials/status_badge.html" with value=req.status label=req.get_status_display %}
+  </div>
+</a>

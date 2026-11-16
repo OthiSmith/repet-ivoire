@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Répétiteur à domicile à {{ commune.name }} — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Trouvez un répétiteur vérifié à {{ commune.name }}{% if commune.name != commune.city.name %} ({{ commune.city.name }}){% endif %} : cours à domicile du primaire au BAC, toutes matières.{% endblock %}
+{% block og_title %}Répétiteur à domicile à {{ commune.name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container" style="max-width: 860px;">
+    <nav aria-label="Fil d'Ariane" class="small mb-2"><a href="{% url 'locations:zones' %}">Zones</a> › {{ commune.city.name }}</nav>
+    <h1 class="mb-3">Répétiteur à domicile à {{ commune.name }}</h1>
+    <p class="lead mb-4">
+      {% if tutor_count %}{{ tutor_count }} répétiteur{{ tutor_count|pluralize }} vérifié{{ tutor_count|pluralize }} se déplace{{ tutor_count|pluralize:",nt" }} à {{ commune.name }}.
+      {% else %}Nous recrutons des répétiteurs à {{ commune.name }}. Déposez votre demande : nous vous prévenons dès qu'un profil adapté est disponible.{% endif %}
+    </p>
+    <div class="d-flex flex-column flex-sm-row gap-2">
+      <a href="{% if user.is_authenticated and user.is_parent %}{% url 'tutoring:request_create' %}{% else %}{% url 'accounts:signup_parent' %}{% endif %}" class="btn btn-accent btn-lg"><i class="bi bi-search" aria-hidden="true"></i> Trouver un répétiteur</a>
+      <a href="{% url 'accounts:signup_tutor' %}" class="btn btn-outline-light-blue btn-lg">J'enseigne à {{ commune.name }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" style="max-width: 860px;">
+    {% if subjects %}
+      <h2 class="h5">Matières disponibles à {{ commune.name }}</h2>
+      <div class="d-flex flex-wrap gap-2 mb-5">
+        {% for subject in subjects %}<span class="badge rounded-pill bg-blue-light text-primary px-3 py-2">{{ subject.name }}</span>{% endfor %}
+      </div>
+    {% endif %}
+
+    <h2 class="h5">Comment ça marche ?</h2>
+    <ol class="mb-5">
+      <li>Vous décrivez le besoin de votre enfant : classe, matières, quartier, disponibilités.</li>
+      <li>Notre équipe vous propose jusqu'à trois répétiteurs vérifiés qui se déplacent à {{ commune.name }}.</li>
+      <li>Vous choisissez : nous vous mettons en relation.</li>
+    </ol>
+
+    {% if nearby %}
+      <h2 class="h6">Autres communes de {{ commune.city.name }}</h2>
+      <div class="d-flex flex-wrap gap-2">
+        {% for other in nearby %}<a href="{{ other.get_absolute_url }}" class="btn btn-sm btn-outline-light-blue">{{ other.name }}</a>{% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

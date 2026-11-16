@@ -1,0 +1,80 @@
+{% extends "backoffice/base_backoffice.html" %}
+{% load humanize %}
+{% block title %}{{ profile }} — Gestion — {{ SITE_NAME }}{% endblock %}
+
+{% block bo_content %}
+<a href="{% url 'backoffice:tutor_list' %}" class="d-inline-block mb-3"><i class="bi bi-arrow-left" aria-hidden="true"></i> Répétiteurs</a>
+<div class="d-flex flex-column flex-md-row gap-3 align-items-md-center mb-4">
+  {% include "partials/tutor_photo.html" with profile=profile %}
+  <div class="flex-grow-1">
+    <h1 class="h3 mb-1">{{ profile }}</h1>
+    <div class="small text-muted">{{ profile.user.email }} · {{ profile.user.phone }} · inscrit le {{ profile.user.date_joined|date:"j F Y" }}</div>
+  </div>
+  {% include "partials/status_badge.html" with value=profile.status label=profile.get_status_display %}
+</div>
+
+<div class="row g-4">
+  <div class="col-12 col-xl-7">
+    <div class="card p-4 mb-4">
+      <h2 class="h6 mb-3">Profil</h2>
+      <dl class="row dl-compact mb-0">
+        <dt class="col-sm-4">Titre</dt><dd class="col-sm-8">{{ profile.headline|default:"—" }}</dd>
+        <dt class="col-sm-4">Présentation</dt><dd class="col-sm-8">{{ profile.bio|linebreaksbr|default:"—" }}</dd>
+        <dt class="col-sm-4">Diplôme</dt><dd class="col-sm-8">{{ profile.get_education_display|default:"—" }}{% if profile.field_of_study %} — {{ profile.field_of_study }}{% endif %}</dd>
+        <dt class="col-sm-4">Expérience</dt><dd class="col-sm-8">{{ profile.experience_years }} an{{ profile.experience_years|pluralize }}</dd>
+        <dt class="col-sm-4">Matières</dt><dd class="col-sm-8">{{ profile.subjects.all|join:", "|default:"—" }}</dd>
+        <dt class="col-sm-4">Niveaux</dt><dd class="col-sm-8">{{ profile.levels.all|join:", "|default:"—" }}</dd>
+        <dt class="col-sm-4">Communes</dt><dd class="col-sm-8">{{ profile.communes.all|join:", "|default:"—" }}</dd>
+        <dt class="col-sm-4">Quartier</dt><dd class="col-sm-8">{{ profile.neighborhood|default:"—" }}</dd>
+        <dt class="col-sm-4">Disponibilités</dt><dd class="col-sm-8">{{ profile.availability|linebreaksbr|default:"—" }}</dd>
+        <dt class="col-sm-4">Tarif indicatif</dt><dd class="col-sm-8">{% if profile.hourly_rate %}{{ profile.hourly_rate|intcomma }} FCFA / h{% else %}—{% endif %}</dd>
+      </dl>
+    </div>
+    {% if proposals %}
+      <div class="card p-4">
+        <h2 class="h6 mb-3">Historique des propositions</h2>
+        {% for proposal in proposals %}
+          <div class="d-flex justify-content-between border-top py-2 gap-2 small">
+            <a href="{% url 'backoffice:request_detail' proposal.request_id %}">{{ proposal.request.level }} — {{ proposal.request.commune }}</a>
+            {% include "partials/status_badge.html" with value=proposal.status label=proposal.get_status_display %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="col-12 col-xl-5">
+    <div class="card p-4 mb-4">
+      <h2 class="h6 mb-3"><i class="bi bi-lock" aria-hidden="true"></i> Justificatifs</h2>
+      {% for document in profile.documents.all %}
+        <div class="border-top py-2">
+          <div class="fw-semibold small">{{ document.get_kind_display }}</div>
+          <a href="{% url 'tutors:document_file' document.pk %}" target="_blank" rel="noopener" class="small">{{ document.original_name|default:"Ouvrir" }}</a>
+        </div>
+      {% empty %}
+        <p class="text-muted small mb-0">Aucun justificatif.</p>
+      {% endfor %}
+    </div>
+
+    {% if profile.status == "PENDING" %}
+      <div class="card p-4">
+        <h2 class="h6 mb-3">Décision</h2>
+        <form method="post" class="mb-3">
+          {% csrf_token %}
+          <button type="submit" name="decision" value="approve" class="btn btn-success w-100"><i class="bi bi-patch-check" aria-hidden="true"></i> Valider le profil</button>
+        </form>
+        <form method="post">
+          {% csrf_token %}
+          <label for="reason" class="form-label">Ou renvoyer pour correction :</label>
+          <textarea id="reason" name="reason" rows="3" class="form-control mb-2" placeholder="Ex. : la photo du diplôme est illisible" required></textarea>
+          <button type="submit" name="decision" value="reject" class="btn btn-outline-danger w-100">Renvoyer au répétiteur</button>
+        </form>
+      </div>
+    {% elif profile.status == "VERIFIED" %}
+      <div class="alert alert-success small mb-0">Vérifié le {{ profile.verified_at|date:"j F Y" }}{% if profile.verified_by %} par {{ profile.verified_by.get_full_name }}{% endif %}.</div>
+    {% elif profile.status == "REJECTED" %}
+      <div class="alert alert-warning small mb-0"><strong>Renvoyé pour correction :</strong><br>{{ profile.rejection_reason|linebreaksbr }}</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

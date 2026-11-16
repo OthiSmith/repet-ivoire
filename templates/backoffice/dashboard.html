@@ -1,0 +1,45 @@
+{% extends "backoffice/base_backoffice.html" %}
+{% block title %}Gestion — {{ SITE_NAME }}{% endblock %}
+
+{% block bo_content %}
+<h1 class="h3 mb-4">Tableau de bord</h1>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3"><div class="stat-tile"><div class="value">{{ pending_tutors|length }}</div><div class="label">Profils à vérifier</div></div></div>
+  <div class="col-6 col-md-3"><div class="stat-tile"><div class="value">{{ stats.open_requests }}</div><div class="label">Demandes ouvertes</div></div></div>
+  <div class="col-6 col-md-3"><div class="stat-tile"><div class="value">{{ stats.verified_tutors }}</div><div class="label">Répétiteurs vérifiés</div></div></div>
+  <div class="col-6 col-md-3"><div class="stat-tile"><div class="value">{{ stats.matches }}</div><div class="label">Mises en relation</div></div></div>
+</div>
+
+<div class="row g-4">
+  <div class="col-12 col-xl-6">
+    <h2 class="h5">Nouvelles demandes</h2>
+    {% for req in new_requests %}
+      {% include "backoffice/partials/request_row.html" %}
+    {% empty %}
+      <div class="card p-3 text-muted">Aucune nouvelle demande.</div>
+    {% endfor %}
+
+    <h2 class="h5 mt-4">Demandes sans proposition active</h2>
+    <p class="small text-muted">Tous les répétiteurs proposés ont refusé ou laissé expirer : à relancer.</p>
+    {% for req in stalled_requests %}
+      {% include "backoffice/partials/request_row.html" %}
+    {% empty %}
+      <div class="card p-3 text-muted">Rien à relancer.</div>
+    {% endfor %}
+  </div>
+  <div class="col-12 col-xl-6">
+    <h2 class="h5">Profils à vérifier</h2>
+    {% for profile in pending_tutors %}
+      <a href="{% url 'backoffice:tutor_review' profile.pk %}" class="card card-hover p-3 mb-2 text-decoration-none text-reset">
+        <div class="d-flex justify-content-between gap-2">
+          <span class="fw-semibold">{{ profile }}</span>
+          <span class="small text-muted">soumis {{ profile.submitted_at|timesince }}</span>
+        </div>
+      </a>
+    {% empty %}
+      <div class="card p-3 text-muted">Aucun profil en attente.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

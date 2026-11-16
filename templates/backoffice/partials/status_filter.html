@@ -1,0 +1,6 @@
+<ul class="nav nav-pills gap-1 mb-3 flex-wrap">
+  {% for value, label in statuses %}
+    <li class="nav-item"><a class="nav-link py-1 px-3 {% if value == current_status %}active{% endif %}" href="?statut={{ value }}">{{ label }}</a></li>
+  {% endfor %}
+  <li class="nav-item"><a class="nav-link py-1 px-3 {% if current_status == 'ALL' %}active{% endif %}" href="?statut=ALL">Toutes</a></li>
+</ul>

@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Mon espace répétiteur — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="d-flex flex-column flex-md-row align-items-md-center gap-3 mb-4">
+      {% include "partials/tutor_photo.html" with profile=profile %}
+      <div class="flex-grow-1">
+        <h1 class="h3 mb-1">Bonjour {{ user.first_name }}</h1>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+          {% include "partials/status_badge.html" with value=profile.status label=profile.get_status_display %}
+          {% if profile.is_verified %}<span class="badge rounded-pill badge-verified"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Vérifié</span>{% endif %}
+          {% if profile.is_verified and not profile.is_available %}<span class="badge rounded-pill status-badge">Ne prend pas de nouveaux élèves</span>{% endif %}
+        </div>
+      </div>
+      {% if profile.can_be_edited %}
+        <a href="{% url 'tutors:profile_edit' %}" class="btn btn-outline-light-blue"><i class="bi bi-pencil" aria-hidden="true"></i> Modifier mon profil</a>
+      {% endif %}
+    </div>
+
+    {# ---------- Étapes de vérification ---------- #}
+    {% if profile.status == "DRAFT" or profile.status == "REJECTED" %}
+      <div class="card p-4 mb-4">
+        {% if profile.status == "REJECTED" %}
+          <div class="alert alert-warning">
+            <strong>Votre profil est à corriger.</strong><br>{{ profile.rejection_reason|linebreaksbr }}
+          </div>
+        {% endif %}
+        <h2 class="h5">Faites vérifier votre profil</h2>
+        <p class="text-muted">Pour recevoir des propositions de cours, complétez votre profil et ajoutez vos justificatifs, puis envoyez-le à notre équipe.</p>
+        <div class="d-flex flex-column flex-sm-row gap-2 mb-3">
+          <a href="{% url 'tutors:profile_edit' %}" class="btn btn-outline-light-blue"><span class="step-number step-number-sm me-1">1</span> Compléter mon profil</a>
+          <a href="{% url 'tutors:documents' %}" class="btn btn-outline-light-blue"><span class="step-number step-number-sm me-1">2</span> Ajouter mes justificatifs</a>
+        </div>
+        {% if missing %}
+          <p class="mb-1 fw-semibold">Il manque encore :</p>
+          <ul class="mb-3">{% for item in missing %}<li>{{ item }}</li>{% endfor %}</ul>
+        {% endif %}
+        <form method="post" action="{% url 'tutors:submit' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-accent" {% if missing %}disabled{% endif %}><span class="step-number step-number-sm step-number-light me-1">3</span> Envoyer pour vérification</button>
+        </form>
+      </div>
+    {% elif profile.status == "PENDING" %}
+      <div class="alert alert-info d-flex gap-2"><i class="bi bi-hourglass-split" aria-hidden="true"></i>
+        <div><strong>Profil en cours de vérification.</strong> Notre équipe examine vos informations et vos justificatifs. Vous serez prévenu ici dès qu'elle aura terminé.</div>
+      </div>
+    {% endif %}
+
+    {# ---------- Propositions ---------- #}
+    {% if profile.is_verified %}
+      <div class="row g-4">
+        <div class="col-12 col-lg-6">
+          <h2 class="h5">Propositions à traiter</h2>
+          {% for proposal in pending_proposals %}
+            {% include "tutoring/partials/tutor_proposal_card.html" %}
+          {% empty %}
+            <div class="card p-4 text-muted">Aucune proposition en attente pour le moment.</div>
+          {% endfor %}
+          {% if accepted_proposals %}
+            <h3 class="h6 mt-4">En attente du choix de la famille</h3>
+            {% for proposal in accepted_proposals %}{% include "tutoring/partials/tutor_proposal_card.html" %}{% endfor %}
+          {% endif %}
+        </div>
+        <div class="col-12 col-lg-6">
+          <h2 class="h5">Mes élèves</h2>
+          {% for proposal in students %}
+            {% include "tutoring/partials/tutor_proposal_card.html" %}
+          {% empty %}
+            <div class="card p-4 text-muted">Les familles qui vous choisissent apparaîtront ici, avec leurs coordonnées.</div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+    <p class="mt-4 mb-0"><a href="{% url 'tutors:documents' %}"><i class="bi bi-folder2" aria-hidden="true"></i> Mes justificatifs</a></p>
+  </div>
+</section>
+{% endblock %}

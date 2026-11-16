@@ -65,6 +65,10 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 { color: var(--ri-navy); font-weight
 .form-control, .form-select { min-height: 46px; border-radius: 10px; }
 .form-control:focus, .form-select:focus { border-color: var(--ri-blue); box-shadow: 0 0 0 .2rem rgba(29, 95, 209, .15); }
 .form-label { font-weight: 500; color: var(--ri-navy); }
+.choice-grid > div { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: .35rem .75rem; }
+.choice-grid label { display: flex; align-items: center; gap: .45rem; cursor: pointer; }
+.choice-grid .form-check-input { margin-top: 0; flex-shrink: 0; }
+.form-card { max-width: 560px; margin: 0 auto; }
 
 /* ---- Navigation ---- */
 .site-navbar { background: #fff; border-bottom: 1px solid var(--ri-border); }
@@ -72,6 +76,7 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 { color: var(--ri-navy); font-weight
 .site-navbar .nav-link { font-weight: 500; color: var(--ri-text); }
 .site-navbar .nav-link:hover, .site-navbar .nav-link.active { color: var(--ri-blue); }
 .brand-mark { width: 36px; height: 36px; }
+.notif-badge { position: absolute; top: 0; left: 1.4rem; font-size: .65rem; }
 
 /* ---- Hero ---- */
 .hero { background: linear-gradient(180deg, var(--ri-blue-light) 0%, var(--ri-bg) 100%); padding: 3rem 0 3.5rem; }
@@ -84,6 +89,8 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 { color: var(--ri-navy); font-weight
 .section { padding: 3.5rem 0; }
 .section-title { font-size: clamp(1.5rem, 3vw, 2rem); }
 .step-number { width: 36px; height: 36px; border-radius: 50%; background: var(--ri-navy); color: #fff; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+.step-number-sm { width: 24px; height: 24px; font-size: .8rem; }
+.step-number-light { background: #fff; color: var(--ri-accent); }
 
 /* ---- Pied de page ---- */
 .site-footer { background: var(--ri-navy); color: #C9D4E5; }
@@ -95,6 +102,24 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 { color: var(--ri-navy); font-weight
 .badge-verified { background: rgba(30, 158, 106, .12); color: var(--ri-success); font-weight: 600; }
 .badge-unverified { background: #FFF4E5; color: #9A5B13; font-weight: 600; }
 .badge-demo { background: #FDECEC; color: #B42318; font-weight: 700; letter-spacing: .03em; }
+
+/* ---- Statuts (profils, demandes, propositions) ---- */
+.status-badge { font-weight: 600; background: #EEF1F5; color: var(--ri-muted); }
+.status-VERIFIED, .status-MATCHED, .status-CHOSEN, .status-ACCEPTED { background: rgba(30, 158, 106, .12); color: var(--ri-success); }
+.status-PENDING, .status-NEW, .status-SEARCHING { background: #FFF4E5; color: #9A5B13; }
+.status-REJECTED, .status-DECLINED, .status-EXPIRED, .status-CANCELLED { background: #FDECEC; color: #B42318; }
+
+/* ---- Espaces personnels ---- */
+.tutor-photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; background: var(--ri-blue-light); }
+.tutor-photo-placeholder { display: inline-flex; align-items: center; justify-content: center; color: var(--ri-blue); font-size: 2.5rem; }
+.stat-tile { border-radius: var(--ri-radius); background: #fff; border: 1px solid var(--ri-border); padding: 1rem 1.25rem; }
+.stat-tile .value { font-size: 1.75rem; font-weight: 700; color: var(--ri-navy); line-height: 1.1; }
+.stat-tile .label { color: var(--ri-muted); font-size: .875rem; }
+.dl-compact dt { font-weight: 500; color: var(--ri-muted); font-size: .875rem; }
+.dl-compact dd { margin-bottom: .75rem; }
+.notif-unread { border-left: 4px solid var(--ri-blue); }
+.bo-nav .nav-link { color: var(--ri-text); border-radius: 8px; }
+.bo-nav .nav-link.active { background: var(--ri-blue-light); color: var(--ri-blue); font-weight: 600; }
 
 /* ---- Bouton WhatsApp flottant ---- */
 .whatsapp-float { position: fixed; right: 1rem; bottom: 1rem; z-index: 1030; width: 56px; height: 56px; border-radius: 50%; background: #25D366; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.75rem; box-shadow: var(--ri-shadow-hover); text-decoration: none; }

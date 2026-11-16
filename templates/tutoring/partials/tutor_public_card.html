@@ -1,0 +1,18 @@
+{# Profil d'un répétiteur tel que le voit une famille (sans coordonnées avant la mise en relation). #}
+{% load humanize %}
+<div class="d-flex gap-3">
+  {% include "partials/tutor_photo.html" with profile=tutor %}
+  <div class="flex-grow-1">
+    <h3 class="h5 mb-1">{{ tutor.user.first_name }} {{ tutor.user.last_name|slice:":1" }}.
+      <span class="badge rounded-pill badge-verified align-middle"><i class="bi bi-patch-check-fill" aria-hidden="true"></i> Vérifié</span>
+    </h3>
+    {% if tutor.headline %}<p class="mb-1">{{ tutor.headline }}</p>{% endif %}
+    <p class="small text-muted mb-2">
+      {{ tutor.get_education_display }}{% if tutor.field_of_study %} — {{ tutor.field_of_study }}{% endif %}
+      · {{ tutor.experience_years }} an{{ tutor.experience_years|pluralize }} d'expérience
+      {% if tutor.hourly_rate %}· {{ tutor.hourly_rate|intcomma }} FCFA / h{% endif %}
+    </p>
+    <p class="small mb-2"><strong>Matières :</strong> {{ tutor.subjects.all|join:", " }}</p>
+    {% if tutor.bio %}<p class="small mb-0">{{ tutor.bio|linebreaksbr }}</p>{% endif %}
+  </div>
+</div>

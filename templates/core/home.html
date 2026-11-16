@@ -11,8 +11,8 @@
         <h1 class="mb-3">Le bon répétiteur pour faire réussir votre enfant.</h1>
         <p class="lead mb-4">Trouvez facilement un répétiteur qualifié pour accompagner votre enfant à chaque étape de son parcours scolaire.</p>
         <div class="d-flex flex-column flex-sm-row gap-2">
-          <a href="#comment-ca-marche" class="btn btn-accent btn-lg"><i class="bi bi-search" aria-hidden="true"></i> Trouver un répétiteur</a>
-          <a href="#devenir-repetiteur" class="btn btn-outline-light-blue btn-lg"><i class="bi bi-mortarboard" aria-hidden="true"></i> Devenir répétiteur</a>
+          <a href="{% if user.is_authenticated and user.is_parent %}{% url 'tutoring:request_create' %}{% else %}{% url 'accounts:signup_parent' %}{% endif %}" class="btn btn-accent btn-lg"><i class="bi bi-search" aria-hidden="true"></i> Trouver un répétiteur</a>
+          <a href="{% if user.is_authenticated %}{% url 'accounts:dashboard' %}{% else %}{% url 'accounts:signup_tutor' %}{% endif %}" class="btn btn-outline-light-blue btn-lg"><i class="bi bi-mortarboard" aria-hidden="true"></i> Devenir répétiteur</a>
         </div>
       </div>
       <div class="col-12 col-lg-6 text-center">
@@ -130,7 +130,7 @@
           <p class="mb-0 opacity-75">Enseignants, étudiants et professionnels qualifiés : créez gratuitement votre profil et recevez des propositions de cours près de chez vous.</p>
         </div>
         <div class="col-12 col-lg-4 text-lg-end">
-          <span class="badge rounded-pill bg-white text-primary px-3 py-2">Inscriptions ouvertes prochainement</span>
+          <a href="{% url 'accounts:signup_tutor' %}" class="btn btn-accent btn-lg">Créer mon profil</a>
         </div>
       </div>
     </div>

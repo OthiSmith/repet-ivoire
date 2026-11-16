@@ -1,0 +1,5 @@
+{% if profile.photo %}
+  <img src="{{ profile.photo.url }}" alt="Photo de {{ profile.user.first_name }}" class="tutor-photo{% if size %} {{ size }}{% endif %}">
+{% else %}
+  <span class="tutor-photo tutor-photo-placeholder" aria-hidden="true"><i class="bi bi-person"></i></span>
+{% endif %}

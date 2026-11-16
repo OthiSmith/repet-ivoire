@@ -1,0 +1,13 @@
+{% extends "backoffice/base_backoffice.html" %}
+{% block title %}Demandes — Gestion — {{ SITE_NAME }}{% endblock %}
+
+{% block bo_content %}
+<h1 class="h3 mb-3">Demandes</h1>
+{% include "backoffice/partials/status_filter.html" %}
+{% for req in requests %}
+  {% include "backoffice/partials/request_row.html" with show_counts=True %}
+{% empty %}
+  <div class="card p-4 text-muted text-center">Aucune demande.</div>
+{% endfor %}
+{% include "partials/pagination.html" %}
+{% endblock %}

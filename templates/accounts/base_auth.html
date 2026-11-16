@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{# Mise en page centrée des écrans de compte (connexion, inscription, mot de passe). #}
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="form-card">
+      <div class="text-center mb-4">
+        <h1 class="h3 mb-1">{% block auth_title %}{% endblock %}</h1>
+        {% block auth_subtitle %}{% endblock %}
+      </div>
+      <div class="card p-4 p-sm-5">
+        {% block auth_body %}{% endblock %}
+      </div>
+      {% block auth_footer %}{% endblock %}
+    </div>
+  </div>
+</section>
+{% endblock %}
