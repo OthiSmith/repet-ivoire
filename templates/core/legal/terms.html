@@ -1,0 +1,37 @@
+{% extends "core/legal/base_legal.html" %}
+{% block title %}Conditions d'utilisation — {{ SITE_NAME }}{% endblock %}
+{% block legal_title %}Conditions générales d'utilisation{% endblock %}
+{% block legal_updated %}16 novembre 2026{% endblock %}
+
+{% block legal_body %}
+<h2 class="h5">1. Objet</h2>
+<p>{{ SITE_NAME }} est un service de mise en relation entre des parents d'élèves et des répétiteurs proposant des cours à domicile en Côte d'Ivoire. Les présentes conditions encadrent l'utilisation du site.</p>
+
+<h2 class="h5 mt-4">2. Inscription</h2>
+<p>L'inscription est réservée aux personnes majeures. Chaque utilisateur s'engage à fournir des informations exactes et à garder son mot de passe confidentiel.</p>
+
+<h2 class="h5 mt-4">3. Rôle de la plateforme</h2>
+<p>{{ SITE_NAME }} vérifie l'identité et les diplômes des répétiteurs avant de les proposer, puis organise la mise en relation. Les cours sont ensuite convenus directement entre la famille et le répétiteur.</p>
+
+<h2 class="h5 mt-4">4. Engagements des répétiteurs</h2>
+<ul>
+  <li>Fournir des justificatifs authentiques et des informations à jour.</li>
+  <li>Se comporter de façon respectueuse et bienveillante envers les élèves et leur famille.</li>
+  <li>Prévenir la famille en cas d'absence ou d'empêchement.</li>
+</ul>
+
+<h2 class="h5 mt-4">5. Engagements des parents</h2>
+<ul>
+  <li>Décrire leur besoin de façon exacte.</li>
+  <li>Respecter les horaires et conditions convenus avec le répétiteur.</li>
+</ul>
+
+<h2 class="h5 mt-4">6. Suspension</h2>
+<p>{{ SITE_NAME }} peut suspendre un compte en cas de fausse déclaration, de comportement inapproprié ou de non-respect des présentes conditions.</p>
+
+<h2 class="h5 mt-4">7. Tarifs et paiement</h2>
+<p>[à compléter : tarifs, commission éventuelle de la plateforme et modalités de paiement.]</p>
+
+<h2 class="h5 mt-4">8. Contact</h2>
+<p class="mb-0">Pour toute question : <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>.</p>
+{% endblock %}

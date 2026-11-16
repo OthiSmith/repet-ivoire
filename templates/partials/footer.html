@@ -14,6 +14,7 @@
         <ul class="list-unstyled small d-grid gap-1">
           <li><a href="{% url 'core:home' %}#comment-ca-marche">Comment ça marche ?</a></li>
           <li><a href="{% url 'core:home' %}#devenir-repetiteur">Devenir répétiteur</a></li>
+          <li><a href="{% url 'core:faq' %}">Questions fréquentes</a></li>
         </ul>
       </div>
       <div class="col-6 col-md-4">
@@ -21,10 +22,18 @@
         <ul class="list-unstyled small d-grid gap-1">
           <li><i class="bi bi-envelope me-1" aria-hidden="true"></i> <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></li>
           {% if CONTACT_PHONE %}<li><i class="bi bi-telephone me-1" aria-hidden="true"></i> {{ CONTACT_PHONE }}</li>{% endif %}
+          {% if WHATSAPP_URL %}<li><i class="bi bi-whatsapp me-1" aria-hidden="true"></i> <a href="{{ WHATSAPP_URL }}" target="_blank" rel="noopener">WhatsApp</a></li>{% endif %}
         </ul>
       </div>
     </div>
     <hr class="border-secondary my-4">
-    <p class="small mb-0">&copy; {% now "Y" %} {{ SITE_NAME }}. Tous droits réservés.</p>
+    <div class="d-flex flex-column flex-md-row justify-content-between gap-2 small">
+      <p class="mb-0">&copy; {% now "Y" %} {{ SITE_NAME }}. Tous droits réservés.</p>
+      <ul class="list-inline mb-0">
+        <li class="list-inline-item"><a href="{% url 'core:legal_notice' %}">Mentions légales</a></li>
+        <li class="list-inline-item"><a href="{% url 'core:privacy' %}">Confidentialité</a></li>
+        <li class="list-inline-item"><a href="{% url 'core:terms' %}">Conditions d'utilisation</a></li>
+      </ul>
+    </div>
   </div>
 </footer>

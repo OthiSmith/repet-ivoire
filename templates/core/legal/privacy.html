@@ -1,0 +1,33 @@
+{% extends "core/legal/base_legal.html" %}
+{% block title %}Politique de confidentialité — {{ SITE_NAME }}{% endblock %}
+{% block legal_title %}Politique de confidentialité{% endblock %}
+{% block legal_updated %}16 novembre 2026{% endblock %}
+
+{% block legal_body %}
+<p>{{ SITE_NAME }} attache une grande importance à la protection de vos données personnelles, conformément à la loi ivoirienne n° 2013-450 du 19 juin 2013 relative à la protection des données à caractère personnel, sous le contrôle de l'ARTCI.</p>
+
+<h2 class="h5 mt-4">1. Données collectées</h2>
+<ul>
+  <li><strong>Tous les utilisateurs :</strong> nom, prénom, adresse e-mail, numéro de téléphone.</li>
+  <li><strong>Parents :</strong> commune et quartier, niveau scolaire et besoins de l'enfant, disponibilités.</li>
+  <li><strong>Répétiteurs :</strong> photo, parcours, matières et niveaux enseignés, zones d'intervention, disponibilités, pièce d'identité et diplômes (justificatifs).</li>
+</ul>
+
+<h2 class="h5 mt-4">2. Finalités</h2>
+<p>Ces données servent uniquement à créer votre compte, vérifier les répétiteurs, organiser la mise en relation entre familles et répétiteurs, et vous envoyer les notifications liées au service. Elles ne sont ni vendues ni cédées à des tiers.</p>
+
+<h2 class="h5 mt-4">3. Qui y a accès ?</h2>
+<ul>
+  <li>Les justificatifs des répétiteurs ne sont consultables que par l'équipe de vérification et ne sont jamais publiés.</li>
+  <li>Les coordonnées d'un parent ou d'un répétiteur ne sont transmises à l'autre partie qu'après confirmation de la mise en relation.</li>
+</ul>
+
+<h2 class="h5 mt-4">4. Durée de conservation</h2>
+<p>Les données sont conservées tant que le compte est actif, puis supprimées ou anonymisées dans un délai de [à compléter] après la fermeture du compte, sauf obligation légale contraire.</p>
+
+<h2 class="h5 mt-4">5. Sécurité</h2>
+<p>Les mots de passe sont chiffrés, les connexions sont protégées contre les tentatives répétées et les justificatifs sont stockés hors de l'espace public du site.</p>
+
+<h2 class="h5 mt-4">6. Vos droits</h2>
+<p class="mb-0">Vous pouvez demander l'accès, la rectification ou la suppression de vos données, ou vous opposer à leur traitement, en écrivant à <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>. Vous pouvez également saisir l'ARTCI.</p>
+{% endblock %}

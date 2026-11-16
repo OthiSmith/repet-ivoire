@@ -6,7 +6,18 @@
   <meta name="description" content="{% block meta_description %}{{ SITE_NAME }} met en relation les parents et des répétiteurs qualifiés pour des cours à domicile partout en Côte d'Ivoire.{% endblock %}">
   <meta name="theme-color" content="#0B2545">
   <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+  {# Aperçu lors du partage du lien (WhatsApp, Facebook, LinkedIn…) #}
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="{{ SITE_NAME }}">
+  <meta property="og:locale" content="fr_CI">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:title" content="{% block og_title %}{{ SITE_NAME }} — Le bon répétiteur pour faire réussir votre enfant{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Cours à domicile en Côte d'Ivoire avec des répétiteurs vérifiés, du primaire au BAC.{% endblock %}">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'img/og-image.png' %}">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="{% static 'img/logo.svg' %}" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
   <link rel="stylesheet" href="{% static 'vendor/bootstrap/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'vendor/bootstrap-icons/bootstrap-icons.min.css' %}">
   <link rel="stylesheet" href="{% static 'css/theme.css' %}">
@@ -32,6 +43,12 @@
   </main>
 
   {% block footer %}{% include "partials/footer.html" %}{% endblock %}
+
+  {% if WHATSAPP_URL %}
+    <a href="{{ WHATSAPP_URL }}" class="whatsapp-float" target="_blank" rel="noopener" aria-label="Nous écrire sur WhatsApp">
+      <i class="bi bi-whatsapp" aria-hidden="true"></i>
+    </a>
+  {% endif %}
 
   <script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'js/main.js' %}"></script>

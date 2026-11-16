@@ -1,0 +1,24 @@
+{% extends "core/legal/base_legal.html" %}
+{% block title %}Mentions légales — {{ SITE_NAME }}{% endblock %}
+{% block legal_title %}Mentions légales{% endblock %}
+{% block legal_updated %}16 novembre 2026{% endblock %}
+
+{% block legal_body %}
+<h2 class="h5">Éditeur du site</h2>
+<ul class="list-unstyled">
+  <li><strong>Raison sociale :</strong> {{ legal.company_name|default:"[à compléter]" }}{% if legal.company_form %} ({{ legal.company_form }}){% endif %}</li>
+  <li><strong>RCCM :</strong> {{ legal.rccm|default:"[à compléter]" }}</li>
+  <li><strong>Siège :</strong> {{ legal.address|default:"[à compléter]" }}</li>
+  <li><strong>Directeur de la publication :</strong> {{ legal.director|default:"[à compléter]" }}</li>
+  <li><strong>Contact :</strong> <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a>{% if CONTACT_PHONE %} — {{ CONTACT_PHONE }}{% endif %}</li>
+</ul>
+
+<h2 class="h5 mt-4">Hébergement</h2>
+<p>{{ legal.host|default:"[à compléter : nom, adresse et contact de l'hébergeur]" }}</p>
+
+<h2 class="h5 mt-4">Propriété intellectuelle</h2>
+<p>Les contenus du site (textes, logo, éléments graphiques) sont la propriété de l'éditeur, sauf mention contraire. Toute reproduction sans autorisation est interdite.</p>
+
+<h2 class="h5 mt-4">Données personnelles</h2>
+<p class="mb-0">Le traitement des données personnelles est décrit dans la <a href="{% url 'core:privacy' %}">politique de confidentialité</a>.</p>
+{% endblock %}

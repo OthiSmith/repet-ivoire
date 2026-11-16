@@ -186,6 +186,16 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="Répét'Ivoire <no-reply
 SITE_NAME = "Répét'Ivoire"
 CONTACT_EMAIL = env("CONTACT_EMAIL", default="contact@repetivoire.local")
 CONTACT_PHONE = env("CONTACT_PHONE", default="")
+# Numéro WhatsApp affiché sur le site (bouton flottant). Vide = bouton masqué.
+WHATSAPP_NUMBER = env("WHATSAPP_NUMBER", default="")
+
+# Informations légales (mentions légales). À renseigner avant la mise en ligne.
+LEGAL_COMPANY_NAME = env("LEGAL_COMPANY_NAME", default="")
+LEGAL_COMPANY_FORM = env("LEGAL_COMPANY_FORM", default="")
+LEGAL_RCCM = env("LEGAL_RCCM", default="")
+LEGAL_ADDRESS = env("LEGAL_ADDRESS", default="")
+LEGAL_DIRECTOR = env("LEGAL_DIRECTOR", default="")
+LEGAL_HOST = env("LEGAL_HOST", default="")
 
 # Interrupteurs de fonctionnalités (désactivées tant que l'équipe fondatrice
 # n'en décide pas autrement).
