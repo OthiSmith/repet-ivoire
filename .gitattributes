@@ -1,0 +1,6 @@
+# Fins de ligne normalisées (LF) dans le dépôt
+* text=auto eol=lf
+*.woff binary
+*.woff2 binary
+*.png binary
+*.jpg binary

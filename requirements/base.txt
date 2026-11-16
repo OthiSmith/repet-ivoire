@@ -1,0 +1,7 @@
+# Dépendances communes (développement et production)
+Django>=5.2,<5.3          # Version LTS, supportée jusqu'en avril 2028
+psycopg[binary]>=3.2,<4   # Pilote PostgreSQL
+Pillow>=11,<14            # Traitement des images (photos de profil)
+django-environ>=0.11,<1   # Lecture du fichier .env
+whitenoise>=6.7,<7        # Service des fichiers statiques
+django-axes>=7,<10        # Protection anti force brute sur la connexion

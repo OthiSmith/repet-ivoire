@@ -1,0 +1,108 @@
+/* ==========================================================================
+   Répét'Ivoire — thème principal
+   Surcharge légère de Bootstrap 5.3 via ses variables CSS.
+   ========================================================================== */
+
+/* ---- Police Inter (servie en local) ---- */
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap; src: url("../vendor/inter/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 500; font-display: swap; src: url("../vendor/inter/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 600; font-display: swap; src: url("../vendor/inter/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 700; font-display: swap; src: url("../vendor/inter/inter-latin-700-normal.woff2") format("woff2"); }
+
+/* ---- Jetons de couleur ---- */
+:root {
+  --ri-navy: #0B2545;          /* bleu foncé : confiance */
+  --ri-blue: #1D5FD1;          /* bleu principal */
+  --ri-blue-dark: #174CA8;
+  --ri-blue-light: #E8F0FC;    /* bleu clair : fonds */
+  --ri-accent: #F28C28;        /* orange : appels à l'action */
+  --ri-accent-dark: #D9761A;
+  --ri-success: #1E9E6A;       /* badge « Vérifié » */
+  --ri-surface: #FFFFFF;
+  --ri-bg: #F6F8FB;
+  --ri-text: #1B2433;
+  --ri-muted: #5B677A;
+  --ri-border: #E3E8EF;
+  --ri-radius: 12px;
+  --ri-shadow: 0 1px 2px rgba(11, 37, 69, .06), 0 4px 16px rgba(11, 37, 69, .06);
+  --ri-shadow-hover: 0 2px 4px rgba(11, 37, 69, .08), 0 10px 28px rgba(11, 37, 69, .10);
+
+  /* Branchement sur les variables Bootstrap */
+  --bs-body-font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --bs-body-color: var(--ri-text);
+  --bs-body-bg: var(--ri-bg);
+  --bs-primary: var(--ri-blue);
+  --bs-primary-rgb: 29, 95, 209;
+  --bs-link-color: var(--ri-blue);
+  --bs-link-color-rgb: 29, 95, 209;
+  --bs-link-hover-color: var(--ri-blue-dark);
+  --bs-border-color: var(--ri-border);
+  --bs-border-radius: 8px;
+  --bs-border-radius-lg: var(--ri-radius);
+  --bs-secondary-color: var(--ri-muted);
+}
+
+body { -webkit-font-smoothing: antialiased; }
+h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 { color: var(--ri-navy); font-weight: 700; letter-spacing: -.01em; }
+.text-muted { color: var(--ri-muted) !important; }
+.bg-navy { background-color: var(--ri-navy) !important; }
+.bg-blue-light { background-color: var(--ri-blue-light) !important; }
+
+/* ---- Boutons ---- */
+.btn { font-weight: 600; border-radius: 10px; padding: .6rem 1.15rem; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: .4rem; }
+.btn-sm { min-height: 36px; padding: .35rem .8rem; }
+.btn-primary { --bs-btn-bg: var(--ri-blue); --bs-btn-border-color: var(--ri-blue); --bs-btn-hover-bg: var(--ri-blue-dark); --bs-btn-hover-border-color: var(--ri-blue-dark); --bs-btn-active-bg: var(--ri-blue-dark); }
+.btn-accent { --bs-btn-color: #fff; --bs-btn-bg: var(--ri-accent); --bs-btn-border-color: var(--ri-accent); --bs-btn-hover-color: #fff; --bs-btn-hover-bg: var(--ri-accent-dark); --bs-btn-hover-border-color: var(--ri-accent-dark); --bs-btn-active-color: #fff; --bs-btn-active-bg: var(--ri-accent-dark); --bs-btn-focus-shadow-rgb: 242, 140, 40; }
+.btn-outline-light-blue { --bs-btn-color: var(--ri-navy); --bs-btn-border-color: var(--ri-border); --bs-btn-bg: #fff; --bs-btn-hover-bg: var(--ri-blue-light); --bs-btn-hover-border-color: var(--ri-blue); --bs-btn-hover-color: var(--ri-navy); }
+
+/* ---- Cartes ---- */
+.card { border: 1px solid var(--ri-border); border-radius: var(--ri-radius); box-shadow: var(--ri-shadow); }
+.card-hover { transition: box-shadow .2s ease, transform .2s ease; }
+.card-hover:hover { box-shadow: var(--ri-shadow-hover); transform: translateY(-2px); }
+.icon-bubble { width: 48px; height: 48px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: var(--ri-blue-light); color: var(--ri-blue); font-size: 1.35rem; }
+
+/* ---- Formulaires ---- */
+.form-control, .form-select { min-height: 46px; border-radius: 10px; }
+.form-control:focus, .form-select:focus { border-color: var(--ri-blue); box-shadow: 0 0 0 .2rem rgba(29, 95, 209, .15); }
+.form-label { font-weight: 500; color: var(--ri-navy); }
+
+/* ---- Navigation ---- */
+.site-navbar { background: #fff; border-bottom: 1px solid var(--ri-border); }
+.site-navbar .navbar-brand { font-weight: 700; color: var(--ri-navy); display: flex; align-items: center; gap: .5rem; }
+.site-navbar .nav-link { font-weight: 500; color: var(--ri-text); }
+.site-navbar .nav-link:hover, .site-navbar .nav-link.active { color: var(--ri-blue); }
+.brand-mark { width: 36px; height: 36px; }
+
+/* ---- Hero ---- */
+.hero { background: linear-gradient(180deg, var(--ri-blue-light) 0%, var(--ri-bg) 100%); padding: 3rem 0 3.5rem; }
+.hero h1 { font-size: clamp(1.9rem, 4.5vw, 3rem); line-height: 1.15; }
+.hero .lead { color: var(--ri-muted); font-size: clamp(1rem, 2.2vw, 1.2rem); }
+.hero-illustration { width: 100%; max-width: 480px; height: auto; }
+.hero .btn { white-space: nowrap; }
+
+/* ---- Sections ---- */
+.section { padding: 3.5rem 0; }
+.section-title { font-size: clamp(1.5rem, 3vw, 2rem); }
+.step-number { width: 36px; height: 36px; border-radius: 50%; background: var(--ri-navy); color: #fff; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; }
+
+/* ---- Pied de page ---- */
+.site-footer { background: var(--ri-navy); color: #C9D4E5; }
+.site-footer a { color: #C9D4E5; text-decoration: none; }
+.site-footer a:hover { color: #fff; }
+.site-footer h6 { color: #fff; font-weight: 600; }
+
+/* ---- Badges ---- */
+.badge-verified { background: rgba(30, 158, 106, .12); color: var(--ri-success); font-weight: 600; }
+.badge-unverified { background: #FFF4E5; color: #9A5B13; font-weight: 600; }
+.badge-demo { background: #FDECEC; color: #B42318; font-weight: 700; letter-spacing: .03em; }
+
+/* ---- Accessibilité ---- */
+:focus-visible { outline: 3px solid rgba(29, 95, 209, .45); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) { .card-hover, .card-hover:hover { transition: none; transform: none; } }
+
+/* ---- Mobile ---- */
+@media (max-width: 575.98px) {
+  .section { padding: 2.5rem 0; }
+  .hero { padding: 2rem 0 2.5rem; }
+  .hero .btn { width: 100%; }
+}

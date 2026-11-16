@@ -1,0 +1,30 @@
+{% load static %}
+<footer class="site-footer mt-auto pt-5 pb-4">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-12 col-md-5">
+        <div class="d-flex align-items-center gap-2 mb-2">
+          <img src="{% static 'img/logo.svg' %}" alt="" width="32" height="32">
+          <span class="fw-bold text-white fs-5">{{ SITE_NAME }}</span>
+        </div>
+        <p class="small mb-0">La plateforme qui met en relation les familles et des répétiteurs qualifiés pour des cours à domicile, partout en Côte d'Ivoire.</p>
+      </div>
+      <div class="col-6 col-md-3">
+        <h6>Liens utiles</h6>
+        <ul class="list-unstyled small d-grid gap-1">
+          <li><a href="{% url 'core:home' %}#comment-ca-marche">Comment ça marche ?</a></li>
+          <li><a href="{% url 'core:home' %}#devenir-repetiteur">Devenir répétiteur</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md-4">
+        <h6>Contact</h6>
+        <ul class="list-unstyled small d-grid gap-1">
+          <li><i class="bi bi-envelope me-1" aria-hidden="true"></i> <a href="mailto:{{ CONTACT_EMAIL }}">{{ CONTACT_EMAIL }}</a></li>
+          {% if CONTACT_PHONE %}<li><i class="bi bi-telephone me-1" aria-hidden="true"></i> {{ CONTACT_PHONE }}</li>{% endif %}
+        </ul>
+      </div>
+    </div>
+    <hr class="border-secondary my-4">
+    <p class="small mb-0">&copy; {% now "Y" %} {{ SITE_NAME }}. Tous droits réservés.</p>
+  </div>
+</footer>

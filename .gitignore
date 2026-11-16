@@ -1,0 +1,33 @@
+# Environnement Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Secrets et configuration locale
+.env
+
+# Base de données locale
+db.sqlite3
+db.sqlite3-journal
+
+# Fichiers téléversés (publics et privés)
+media/*
+!media/.gitkeep
+private_media/*
+!private_media/.gitkeep
+
+# Statiques collectés
+staticfiles/
+
+# Outils
+.coverage
+htmlcov/
+.idea/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
+
+# Configuration locale des outils
+.claude/
