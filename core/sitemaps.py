@@ -9,7 +9,7 @@ class StaticPagesSitemap(Sitemap):
     changefreq = "monthly"
 
     def items(self):
-        return ["core:home", "core:faq", "locations:zones", "accounts:signup_parent", "accounts:signup_tutor",
+        return ["core:home", "core:faq", "premium:info", "locations:zones", "accounts:signup_parent", "accounts:signup_tutor",
                 "core:legal_notice", "core:privacy", "core:terms"]
 
     def location(self, item):

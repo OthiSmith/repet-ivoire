@@ -1,0 +1,15 @@
+{% extends "premium/base_tracking.html" %}
+{% block title %}{{ page_title }} — {{ SITE_NAME }}{% endblock %}
+
+{% block tracking_content %}
+<form method="post" novalidate class="card p-4 p-lg-5" style="max-width: 720px;">
+  {% csrf_token %}
+  <h2 class="h5">{{ page_title }}</h2>
+  {% if intro %}<p class="text-muted">{{ intro }}</p>{% endif %}
+  {{ form }}
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary">{{ submit_label }}</button>
+    <a href="{% url 'premium:tracking' subscription.pk %}" class="btn btn-outline-light-blue">Annuler</a>
+  </div>
+</form>
+{% endblock %}

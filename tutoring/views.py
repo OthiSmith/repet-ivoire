@@ -48,6 +48,7 @@ class RequestDetailView(ParentRequiredMixin, DetailView):
         context["accepted_proposals"] = proposals.filter(status=Proposal.Status.ACCEPTED)
         context["pending_count"] = proposals.filter(status=Proposal.Status.PENDING).count()
         context["chosen"] = proposals.filter(status=Proposal.Status.CHOSEN).first()
+        context["premium"] = getattr(self.object, "premium", None)
         return context
 
 

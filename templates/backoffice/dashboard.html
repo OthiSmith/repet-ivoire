@@ -29,7 +29,30 @@
     {% endfor %}
   </div>
   <div class="col-12 col-xl-6">
-    <h2 class="h5">Profils à vérifier</h2>
+    <h2 class="h5"><i class="bi bi-star-fill text-warning" aria-hidden="true"></i> Demandes Premium à activer</h2>
+    {% for sub in premium_requests %}
+      <a href="{% url 'backoffice:premium_detail' sub.pk %}" class="card card-hover p-3 mb-2 text-decoration-none text-reset">
+        <div class="d-flex justify-content-between gap-2">
+          <span class="fw-semibold">{{ sub.request.child_first_name }} · {{ sub.request.level }} — {{ sub.request.parent.get_full_name }}</span>
+          <span class="small text-muted">{{ sub.months_requested }} mois</span>
+        </div>
+      </a>
+    {% empty %}
+      <div class="card p-3 text-muted mb-2">Aucune demande en attente.</div>
+    {% endfor %}
+    {% if premium_issues %}
+      <h2 class="h5 mt-4">Problèmes signalés sur des séances</h2>
+      {% for session in premium_issues %}
+        <a href="{% url 'backoffice:premium_detail' session.subscription_id %}" class="card card-hover p-3 mb-2 text-decoration-none text-reset">
+          <div class="d-flex justify-content-between gap-2 small">
+            <span><strong>{{ session.subscription.request.child_first_name }}</strong> · {{ session.get_parent_issue_display }}</span>
+            <span class="text-muted">{{ session.date|date:"j M" }}</span>
+          </div>
+        </a>
+      {% endfor %}
+    {% endif %}
+
+    <h2 class="h5 mt-4">Profils à vérifier</h2>
     {% for profile in pending_tutors %}
       <a href="{% url 'backoffice:tutor_review' profile.pk %}" class="card card-hover p-3 mb-2 text-decoration-none text-reset">
         <div class="d-flex justify-content-between gap-2">

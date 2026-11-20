@@ -1,0 +1,45 @@
+{# Une entrée du cahier de séances, avec la confirmation du parent si elle est attendue. #}
+<div class="border-top py-3">
+  <div class="d-flex justify-content-between align-items-start gap-2">
+    <div>
+      <div class="fw-semibold">{{ session.date|date:"l j F" }}{% if session.status == "DONE" %} · {{ session.duration_minutes }} min{% endif %}</div>
+      {% for item in session.plan_items.all %}<span class="badge rounded-pill bg-blue-light text-primary me-1">{{ item.subject }} · {{ item.title }}</span>{% endfor %}
+    </div>
+    <div class="d-flex flex-column align-items-end gap-1">
+      {% if session.status != "DONE" %}
+        {% include "partials/status_badge.html" with value=session.status label=session.get_status_display %}
+      {% endif %}
+      {% if session.status == "DONE" %}
+        {% if session.parent_status == "CONFIRMED" %}<span class="badge rounded-pill status-badge status-CONFIRMED"><i class="bi bi-check2" aria-hidden="true"></i> Confirmée</span>
+        {% elif session.parent_status == "DISPUTED" %}<span class="badge rounded-pill status-badge status-DISPUTED"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> {{ session.get_parent_issue_display }}</span>
+        {% else %}<span class="badge rounded-pill status-badge status-PENDING">À confirmer</span>{% endif %}
+      {% endif %}
+    </div>
+  </div>
+  {% if session.content %}<p class="small mb-1 mt-2">{{ session.content|linebreaksbr }}</p>{% endif %}
+  {% if session.homework %}<p class="small mb-1"><strong>Devoirs :</strong> {{ session.homework|linebreaksbr }}</p>{% endif %}
+  {% if session.engagement %}<p class="small mb-1"><strong>Implication :</strong> {{ session.engagement }}/5</p>{% endif %}
+  {% if session.tutor_comment %}<p class="small fst-italic mb-1">« {{ session.tutor_comment }} »</p>{% endif %}
+  {% if session.parent_comment %}<p class="small mb-1 text-danger"><strong>Famille :</strong> {{ session.parent_comment }}</p>{% endif %}
+
+  {% if role == "parent" and session.awaits_parent and not readonly %}
+    <form method="post" action="{% url 'premium:session_respond' session.pk %}" class="bg-blue-light rounded p-3 mt-2">
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <p class="small fw-semibold mb-2">Cette séance a-t-elle bien eu lieu comme indiqué ?</p>
+      <button type="submit" name="decision" value="confirm" class="btn btn-sm btn-success mb-2"><i class="bi bi-check-lg" aria-hidden="true"></i> Oui, je confirme</button>
+      <details>
+        <summary class="small text-primary">Non, signaler un problème</summary>
+        <div class="mt-2">
+          <label class="form-label small" for="issue-{{ session.pk }}">Problème</label>
+          <select name="issue" id="issue-{{ session.pk }}" class="form-select form-select-sm mb-2">
+            {% for value, label in issue_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+          </select>
+          <label class="form-label small" for="comment-{{ session.pk }}">Commentaire (facultatif)</label>
+          <textarea name="comment" id="comment-{{ session.pk }}" rows="2" class="form-control form-control-sm mb-2"></textarea>
+          <button type="submit" name="decision" value="dispute" class="btn btn-sm btn-outline-danger">Signaler</button>
+        </div>
+      </details>
+    </form>
+  {% endif %}
+</div>

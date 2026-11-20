@@ -12,6 +12,16 @@
     });
   });
 
+  // Listes déroulantes qui envoient leur formulaire dès qu'on change la valeur (état d'un chapitre).
+  document.querySelectorAll("select[data-autosubmit]").forEach(function (select) {
+    select.addEventListener("change", function () { select.form.submit(); });
+  });
+
+  // Boutons « Imprimer » (rapport mensuel).
+  document.querySelectorAll("[data-print]").forEach(function (button) {
+    button.addEventListener("click", function () { window.print(); });
+  });
+
   // Masque les messages flash de succès après 6 secondes.
   document.querySelectorAll(".alert-success[data-autodismiss]").forEach(function (el) {
     setTimeout(function () {

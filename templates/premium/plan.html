@@ -1,0 +1,65 @@
+{% extends "premium/base_tracking.html" %}
+{% block title %}Programme — {{ tutoring_request.child_first_name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block tracking_content %}
+<div class="row g-4">
+  <div class="col-12 {% if can_edit %}col-lg-8{% endif %}">
+    <div class="card p-4">
+      <h2 class="h5 mb-3">Plan de travail</h2>
+      {% regroup items by subject as by_subject %}
+      {% for group in by_subject %}
+        <h3 class="h6 mt-3 mb-2">{{ group.grouper }}</h3>
+        {% for item in group.list %}
+          <div class="d-flex justify-content-between align-items-center border-top py-2 gap-2">
+            <span>{{ item.title }}{% if item.acquired_at %} <span class="small text-muted">· acquis le {{ item.acquired_at|date:"j M" }}</span>{% endif %}</span>
+            {% if can_edit %}
+              <div class="d-flex align-items-center gap-1">
+                <form method="post" class="d-flex">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="status">
+                  <input type="hidden" name="item" value="{{ item.pk }}">
+                  <select name="status" class="form-select form-select-sm plan-status" aria-label="État de « {{ item.title }} »" data-autosubmit>
+                    {% for value, label in statuses %}<option value="{{ value }}" {% if value == item.status %}selected{% endif %}>{{ label }}</option>{% endfor %}
+                  </select>
+                  <noscript><button type="submit" class="btn btn-sm btn-primary ms-1">OK</button></noscript>
+                </form>
+                <form method="post" onsubmit="return confirm('Retirer ce chapitre du plan ?');">
+                  {% csrf_token %}
+                  <input type="hidden" name="action" value="delete">
+                  <input type="hidden" name="item" value="{{ item.pk }}">
+                  <button type="submit" class="btn btn-sm btn-link text-danger" aria-label="Retirer « {{ item.title }} »"><i class="bi bi-trash" aria-hidden="true"></i></button>
+                </form>
+              </div>
+            {% else %}
+              <span class="badge rounded-pill status-badge plan-{{ item.status }}">{{ item.get_status_display }}</span>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% empty %}
+        <p class="text-muted small mb-0">Aucun chapitre dans le plan pour l'instant.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% if can_edit %}
+    <div class="col-12 col-lg-4">
+      <div class="card p-4 mb-4">
+        <h2 class="h6">Programme officiel</h2>
+        <p class="small text-muted">Ajoute d'un coup les chapitres du programme de {{ tutoring_request.level }} pour les matières suivies. Vous pourrez retirer ceux qui ne sont pas utiles.</p>
+        <form method="post">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="import">
+          <button type="submit" class="btn btn-sm btn-primary w-100">Importer le programme</button>
+        </form>
+      </div>
+      <form method="post" class="card p-4" novalidate>
+        {% csrf_token %}
+        <input type="hidden" name="action" value="add">
+        <h2 class="h6 mb-3">Ajouter un chapitre ou un objectif</h2>
+        {{ form }}
+        <button type="submit" class="btn btn-sm btn-outline-light-blue w-100">Ajouter</button>
+      </form>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

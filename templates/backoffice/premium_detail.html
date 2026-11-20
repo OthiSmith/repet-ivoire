@@ -1,0 +1,73 @@
+{% extends "backoffice/base_backoffice.html" %}
+{% load humanize %}
+{% block title %}Premium n° {{ subscription.pk }} — Gestion — {{ SITE_NAME }}{% endblock %}
+
+{% block bo_content %}
+{% with req=subscription.request %}
+<a href="{% url 'backoffice:premium_list' %}" class="d-inline-block mb-3"><i class="bi bi-arrow-left" aria-hidden="true"></i> Suivis Premium</a>
+<div class="d-flex justify-content-between align-items-start gap-2 mb-4">
+  <div>
+    <h1 class="h3 mb-1">{{ req.child_first_name }} · {{ req.level }} · {{ req.commune }}</h1>
+    <div class="small text-muted">
+      <a href="{% url 'backoffice:request_detail' req.pk %}">Demande n° {{ req.pk }}</a> ·
+      {{ req.parent.get_full_name }} · <a href="tel:{{ req.parent.phone }}">{{ req.parent.phone }}</a>
+      {% if subscription.tutor %} · Répétiteur : <a href="{% url 'backoffice:tutor_review' subscription.tutor.pk %}">{{ subscription.tutor }}</a>{% endif %}
+    </div>
+  </div>
+  {% include "partials/status_badge.html" with value=subscription.display_status_code label=subscription.display_status %}
+</div>
+
+<div class="row g-4">
+  <div class="col-12 col-xl-7">
+    {% if stats %}
+      <div class="card p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="h6 mb-0">Assiduité depuis le début</h2>
+          <a href="{% url 'premium:tracking' subscription.pk %}" class="small">Ouvrir le suivi complet</a>
+        </div>
+        {% include "premium/partials/attendance.html" %}
+      </div>
+    {% endif %}
+    <div class="card p-4">
+      <h2 class="h6 mb-3">Problèmes signalés par la famille</h2>
+      {% for session in issues %}
+        <div class="border-top py-2 small">
+          <strong>{{ session.date|date:"j M Y" }}</strong> — {{ session.get_parent_issue_display }}
+          {% if session.parent_comment %}<div class="text-muted">« {{ session.parent_comment }} »</div>{% endif %}
+        </div>
+      {% empty %}
+        <p class="text-muted small mb-0">Aucun problème signalé.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-12 col-xl-5">
+    <div class="card p-4 mb-4">
+      <h2 class="h6 mb-3">Abonnement</h2>
+      <dl class="row dl-compact mb-0 small">
+        <dt class="col-6">Demandé le</dt><dd class="col-6">{{ subscription.requested_at|date:"j M Y" }} ({{ subscription.months_requested }} mois)</dd>
+        {% if subscription.starts_on %}
+          <dt class="col-6">Période</dt><dd class="col-6">{{ subscription.starts_on|date:"j M Y" }} → {{ subscription.ends_on|date:"j M Y" }}</dd>
+          <dt class="col-6">Dernier paiement</dt><dd class="col-6">{% if subscription.amount %}{{ subscription.amount|intcomma }} FCFA{% else %}—{% endif %}{% if subscription.payment_method %} · {{ subscription.get_payment_method_display }}{% endif %}{% if subscription.payment_reference %}<br>Réf. {{ subscription.payment_reference }}{% endif %}</dd>
+        {% endif %}
+      </dl>
+    </div>
+
+    {% if subscription.status != "CANCELLED" %}
+      <form method="post" class="card p-4 mb-3" novalidate>
+        {% csrf_token %}
+        <h2 class="h6 mb-1">{% if subscription.is_current %}Prolonger{% else %}Activer après paiement{% endif %}</h2>
+        <p class="small text-muted">{% if subscription.is_current %}La nouvelle période commence le lendemain de la fin actuelle.{% else %}Le suivi démarre aujourd'hui. La famille et le répétiteur sont prévenus.{% endif %}</p>
+        {{ form }}
+        <button type="submit" class="btn btn-success w-100">{% if subscription.is_current %}Prolonger{% else %}Activer le suivi{% endif %}</button>
+      </form>
+      <form method="post" onsubmit="return confirm('Annuler cet abonnement ?');">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="cancel">
+        <button type="submit" class="btn btn-link text-danger px-0">Annuler l'abonnement</button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+{% endwith %}
+{% endblock %}

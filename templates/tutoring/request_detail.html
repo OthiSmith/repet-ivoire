@@ -23,6 +23,26 @@
           <a href="mailto:{{ chosen.tutor.user.email }}" class="btn btn-outline-light-blue"><i class="bi bi-envelope" aria-hidden="true"></i> {{ chosen.tutor.user.email }}</a>
         </div>
       </div>
+
+      {# ---------- Suivi Premium ---------- #}
+      <div class="card p-4 mb-4 premium-card">
+        <span class="badge rounded-pill badge-premium align-self-start mb-2"><i class="bi bi-star-fill" aria-hidden="true"></i> Suivi Premium</span>
+        {% if premium.is_current %}
+          <h2 class="h5">Suivez les progrès de {{ tutoring_request.child_first_name }}</h2>
+          <p class="text-muted mb-3">Programme, séances, assiduité et notes. Actif jusqu'au {{ premium.ends_on|date:"j F Y" }}.</p>
+          <div><a href="{% url 'premium:tracking' premium.pk %}" class="btn btn-accent">Ouvrir le suivi</a></div>
+        {% elif premium.status == "REQUESTED" %}
+          <h2 class="h5">Activation en cours</h2>
+          <p class="text-muted mb-0">Notre équipe vous contacte pour le paiement. <a href="{% url 'premium:offer' tutoring_request.pk %}">Détails</a></p>
+        {% else %}
+          <h2 class="h5">{% if premium.is_expired %}Votre suivi est expiré{% else %}Suivez les progrès de {{ tutoring_request.child_first_name }}{% endif %}</h2>
+          <p class="text-muted mb-3">Avancement selon le programme, cahier de séances, assiduité vérifiée du répétiteur, courbe des notes et rapport mensuel.</p>
+          <div class="d-flex flex-wrap gap-2">
+            <a href="{% url 'premium:offer' tutoring_request.pk %}" class="btn btn-accent">{% if premium.is_expired %}Renouveler{% else %}Découvrir le suivi Premium{% endif %}</a>
+            {% if premium.is_expired %}<a href="{% url 'premium:tracking' premium.pk %}" class="btn btn-outline-light-blue">Voir l'historique</a>{% endif %}
+          </div>
+        {% endif %}
+      </div>
     {% endif %}
 
     {# ---------- Propositions à choisir ---------- #}

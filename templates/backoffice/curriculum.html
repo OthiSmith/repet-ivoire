@@ -1,0 +1,56 @@
+{% extends "backoffice/base_backoffice.html" %}
+{% block title %}Programme de référence — Gestion — {{ SITE_NAME }}{% endblock %}
+
+{% block bo_content %}
+<h1 class="h3 mb-1">Programme de référence</h1>
+<p class="text-muted">Les répétiteurs importent ces chapitres dans le plan de travail de leurs élèves Premium.</p>
+
+<form method="get" class="d-flex flex-column flex-sm-row gap-2 mb-4">
+  <select name="niveau" class="form-select" aria-label="Classe">
+    {% for l in levels %}<option value="{{ l.pk }}" {% if l == level %}selected{% endif %}>{{ l }}</option>{% endfor %}
+  </select>
+  <select name="matiere" class="form-select" aria-label="Matière">
+    {% for s in subjects %}<option value="{{ s.pk }}" {% if s == subject %}selected{% endif %}>{{ s }}</option>{% endfor %}
+  </select>
+  <button type="submit" class="btn btn-primary">Afficher</button>
+</form>
+
+<div class="row g-4">
+  <div class="col-12 col-xl-7">
+    <div class="card p-4">
+      <h2 class="h6 mb-3">{{ subject }} · {{ level }}</h2>
+      {% for unit in units %}
+        <div class="d-flex justify-content-between align-items-center border-top py-2 gap-2">
+          <span>{{ forloop.counter }}. {{ unit.title }}{% if unit.term %} <span class="small text-muted">· {{ unit.get_term_display }}</span>{% endif %}</span>
+          <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="delete">
+            <input type="hidden" name="unit" value="{{ unit.pk }}">
+            <input type="hidden" name="level" value="{{ level.pk }}">
+            <input type="hidden" name="subject" value="{{ subject.pk }}">
+            <button type="submit" class="btn btn-sm btn-link text-danger" aria-label="Supprimer « {{ unit.title }} »"><i class="bi bi-trash" aria-hidden="true"></i></button>
+          </form>
+        </div>
+      {% empty %}
+        <p class="text-muted small mb-0">Aucun chapitre pour cette classe et cette matière.</p>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="col-12 col-xl-5">
+    <form method="post" class="card p-4">
+      {% csrf_token %}
+      <input type="hidden" name="level" value="{{ level.pk }}">
+      <input type="hidden" name="subject" value="{{ subject.pk }}">
+      <h2 class="h6 mb-3">Ajouter des chapitres</h2>
+      <label for="titles" class="form-label">Un chapitre par ligne</label>
+      <textarea id="titles" name="titles" rows="6" class="form-control mb-3" placeholder="Calcul littéral&#10;Théorème de Thalès&#10;…" required></textarea>
+      <label for="term" class="form-label">Période (facultatif)</label>
+      <select id="term" name="term" class="form-select mb-3">
+        <option value="">—</option>
+        {% for value, label in terms %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+      </select>
+      <button type="submit" class="btn btn-primary w-100">Ajouter</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

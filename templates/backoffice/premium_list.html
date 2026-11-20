@@ -1,0 +1,25 @@
+{% extends "backoffice/base_backoffice.html" %}
+{% block title %}Premium — Gestion — {{ SITE_NAME }}{% endblock %}
+
+{% block bo_content %}
+<h1 class="h3 mb-3">Suivis Premium</h1>
+{% include "backoffice/partials/status_filter.html" %}
+{% for sub in subscriptions %}
+  <a href="{% url 'backoffice:premium_detail' sub.pk %}" class="card card-hover p-3 mb-2 text-decoration-none text-reset">
+    <div class="d-flex justify-content-between align-items-start gap-2">
+      <div>
+        <div class="fw-semibold">{{ sub.request.child_first_name }} · {{ sub.request.level }} · {{ sub.request.commune }}</div>
+        <div class="small text-muted">
+          {{ sub.request.parent.get_full_name }} ·
+          {% if sub.status == "REQUESTED" %}{{ sub.months_requested }} mois demandés le {{ sub.requested_at|date:"j M" }}
+          {% elif sub.ends_on %}jusqu'au {{ sub.ends_on|date:"j M Y" }}{% endif %}
+        </div>
+      </div>
+      {% include "partials/status_badge.html" with value=sub.display_status_code label=sub.display_status %}
+    </div>
+  </a>
+{% empty %}
+  <div class="card p-4 text-muted text-center">Aucun abonnement.</div>
+{% endfor %}
+{% include "partials/pagination.html" %}
+{% endblock %}

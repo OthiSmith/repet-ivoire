@@ -54,6 +54,7 @@ LOCAL_APPS = [
     "tutoring",
     "notifications",
     "reviews",
+    "premium",
     "backoffice",
 ]
 
@@ -215,6 +216,15 @@ FEATURE_PAYMENTS_ENABLED = env.bool("FEATURE_PAYMENTS_ENABLED", default=False)
 TUTOR_RESPONSE_DELAY_HOURS = 48
 # Nombre maximum de répétiteurs proposés par demande et par tour.
 MAX_PROPOSALS_PER_ROUND = 3
+
+# Suivi Premium : prix mensuel affiché (FCFA, 0 = « tarif communiqué par l'équipe »)
+# et instructions de paiement montrées au parent après sa demande.
+PREMIUM_MONTHLY_PRICE = env.int("PREMIUM_MONTHLY_PRICE", default=0)
+PREMIUM_PAYMENT_INSTRUCTIONS = env(
+    "PREMIUM_PAYMENT_INSTRUCTIONS",
+    default="Notre équipe vous contacte pour le paiement (Orange Money, MTN MoMo, Moov Money ou Wave). "
+            "Le suivi est activé dès réception.",
+)
 
 # Canaux de notification actifs. Ajouter "notifications.channels.EmailChannel"
 # une fois le SMTP configuré ; SMS et WhatsApp pourront suivre le même modèle.

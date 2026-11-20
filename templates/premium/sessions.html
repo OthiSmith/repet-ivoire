@@ -1,0 +1,19 @@
+{% extends "premium/base_tracking.html" %}
+{% block title %}Cahier de séances — {{ tutoring_request.child_first_name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block header_actions %}
+  {% if role == "tutor" and subscription.is_current %}
+    <a href="{% url 'premium:session_create' subscription.pk %}" class="btn btn-accent d-print-none"><i class="bi bi-journal-plus" aria-hidden="true"></i> Renseigner une séance</a>
+  {% endif %}
+{% endblock %}
+
+{% block tracking_content %}
+<div class="card p-4">
+  <h2 class="h5 mb-0">Cahier de séances</h2>
+  {% for session in sessions %}
+    {% include "premium/partials/session_item.html" %}
+  {% empty %}
+    <p class="text-muted small mb-0 mt-2">Aucune séance renseignée pour l'instant.</p>
+  {% endfor %}
+</div>
+{% endblock %}

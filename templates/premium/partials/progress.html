@@ -1,0 +1,27 @@
+{# Barre empilée par matière : acquis / en cours / à revoir / pas commencé. Les nombres sont écrits, pas seulement colorés. #}
+{% if progress %}
+  <ul class="list-inline small mb-3 progress-legend">
+    <li class="list-inline-item"><span class="legend-swatch seg-ACQUIRED"></span> Acquis</li>
+    <li class="list-inline-item"><span class="legend-swatch seg-IN_PROGRESS"></span> En cours</li>
+    <li class="list-inline-item"><span class="legend-swatch seg-TO_REVIEW"></span> À revoir</li>
+    <li class="list-inline-item"><span class="legend-swatch seg-NOT_STARTED"></span> Pas commencé</li>
+  </ul>
+  {% for row in progress %}
+    <div class="mb-3">
+      <div class="d-flex justify-content-between small mb-1">
+        <span class="fw-semibold">{{ row.subject.name }}</span>
+        <span class="text-muted">{{ row.ACQUIRED }} / {{ row.total }} chapitre{{ row.total|pluralize }} acquis · <strong class="text-body">{{ row.percent }} %</strong></span>
+      </div>
+      <div class="stacked-bar" role="img" aria-label="{{ row.subject.name }} : {% for seg in row.segments %}{{ seg.count }} {{ seg.label|lower }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+        {% for seg in row.segments %}
+          <span class="seg seg-{{ seg.status }}" style="width: {{ seg.width|floatformat:'2u' }}%" title="{{ seg.label }} : {{ seg.count }}"></span>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+{% else %}
+  <p class="text-muted small mb-0">
+    {% if role == "tutor" %}Commencez par établir le plan de travail dans l'onglet <a href="{% url 'premium:plan' subscription.pk %}">Programme</a>.
+    {% else %}Le répétiteur n'a pas encore établi le plan de travail.{% endif %}
+  </p>
+{% endif %}

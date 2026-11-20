@@ -22,6 +22,7 @@ urlpatterns = [
     path("", include("tutors.urls")),
     path("", include("tutoring.urls")),
     path("", include("notifications.urls")),
+    path("", include("premium.urls")),
     path("", include("backoffice.urls")),
     path("", include("locations.urls")),
 ]

@@ -18,6 +18,22 @@ Application Django (templates côté serveur, Bootstrap 5), compatible SQLite (l
 5. **Chaque répétiteur** accepte ou refuse sous 48 h.
 6. **Le parent** choisit parmi ceux qui ont accepté. Les coordonnées ne sont révélées aux deux parties qu'à ce moment-là.
 
+### Suivi Premium (option payante)
+
+Une fois le répétiteur choisi, le parent peut demander le suivi Premium. L'équipe l'active
+dans `/gestion/premium/` après réception du paiement Mobile Money (aucun opérateur n'est encore branché).
+
+- **Programme** : le répétiteur construit le plan de l'élève, en important le programme de référence
+  (géré par l'équipe dans `/gestion/programme/`), puis fait passer chaque chapitre de « en cours » à « acquis ».
+- **Cahier de séances** : contenu, chapitres travaillés, devoirs, implication de l'élève.
+- **Assiduité vérifiée** : le parent confirme chaque séance ou signale une absence, un retard, une séance écourtée.
+  Les séances réalisées sont comparées au rythme prévu. L'équipe est alertée à partir de 2 absences en 30 jours.
+- **Notes** : une courbe par matière, ramenée sur 20.
+- **Rapport mensuel** imprimable ou enregistrable en PDF, et **demande de remplacement prioritaire**.
+
+À l'expiration, l'historique reste consultable mais plus rien ne peut être ajouté.
+Le programme de référence est **vide** au départ : `seed_demo` n'en crée qu'un exemple (Mathématiques, 3e).
+
 ---
 
 ## 1. Prérequis
@@ -74,7 +90,8 @@ python manage.py seed_demo
 ```
 
 Crée un administrateur (`admin@demo.ci`), un parent (`parent@demo.ci`), quatre répétiteurs
-(`repetiteur1@demo.ci` … `repetiteur4@demo.ci`) et une demande. Mot de passe commun : `Demo!2026`.
+(`repetiteur1@demo.ci` … `repetiteur4@demo.ci`), une demande en attente et un second enfant
+déjà suivi en Premium (séances, programme, notes). Mot de passe commun : `Demo!2026`.
 La commande refuse de s'exécuter si `DEBUG=False`.
 
 > Si PowerShell refuse d'activer l'environnement (« l'exécution de scripts est désactivée »), exécuter une fois :
@@ -122,6 +139,7 @@ plateforme-repetiteurs/
 ├── tutoring/             Demandes, propositions, mises en relation
 ├── notifications/        Notifications internes (canaux externes plus tard)
 ├── reviews/              Avis (désactivés par défaut)
+├── premium/              Suivi Premium : abonnement, programme, séances, assiduité, notes, rapport
 ├── backoffice/           Tableau de bord administrateur
 ├── templates/            Gabarits HTML (base, partials, pages)
 ├── static/               CSS, JS, images, bibliothèques servies en local

@@ -5,6 +5,9 @@
       <div class="small text-muted">{{ proposal.request.sessions_per_week }} séance{{ proposal.request.sessions_per_week|pluralize }} par semaine · proposée le {{ proposal.created_at|date:"j F" }}</div>
       {% if proposal.status == "PENDING" %}<div class="small text-danger mt-1"><i class="bi bi-clock" aria-hidden="true"></i> Répondre avant le {{ proposal.expires_at|date:"j F à H\hi" }}</div>{% endif %}
     </div>
-    {% include "partials/status_badge.html" with value=proposal.status label=proposal.get_status_display %}
+    <div class="d-flex flex-column align-items-end gap-1">
+      {% include "partials/status_badge.html" with value=proposal.status label=proposal.get_status_display %}
+      {% if proposal.status == "CHOSEN" and proposal.request.premium.is_current %}<span class="badge rounded-pill badge-premium"><i class="bi bi-star-fill" aria-hidden="true"></i> Premium</span>{% endif %}
+    </div>
   </div>
 </a>

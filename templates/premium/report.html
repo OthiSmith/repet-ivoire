@@ -1,0 +1,66 @@
+{% extends "premium/base_tracking.html" %}
+{% block title %}Rapport {{ month|date:"F Y" }} — {{ tutoring_request.child_first_name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block header_actions %}
+  <div class="d-flex align-items-center gap-2 d-print-none">
+    <a href="?mois={{ previous_month }}" class="btn btn-sm btn-outline-light-blue" aria-label="Mois précédent"><i class="bi bi-chevron-left" aria-hidden="true"></i></a>
+    <span class="fw-semibold text-capitalize">{{ month|date:"F Y" }}</span>
+    {% if next_month %}<a href="?mois={{ next_month }}" class="btn btn-sm btn-outline-light-blue" aria-label="Mois suivant"><i class="bi bi-chevron-right" aria-hidden="true"></i></a>{% endif %}
+    <button type="button" class="btn btn-sm btn-primary" data-print><i class="bi bi-printer" aria-hidden="true"></i> Imprimer / PDF</button>
+  </div>
+{% endblock %}
+
+{% block tracking_content %}
+<div class="report">
+  <div class="d-none d-print-block mb-3">
+    <strong>{{ SITE_NAME }}</strong> — Rapport de suivi de <span class="text-capitalize">{{ month|date:"F Y" }}</span>
+  </div>
+
+  <div class="card p-4 mb-4">
+    <h2 class="h5 mb-3">Assiduité du mois</h2>
+    {% include "premium/partials/attendance.html" %}
+  </div>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-6">
+      <div class="card p-4 h-100">
+        <h2 class="h5 mb-3">Chapitres acquis ce mois-ci</h2>
+        {% for item in acquired %}
+          <div class="border-top py-2 small"><i class="bi bi-check-circle-fill text-success" aria-hidden="true"></i> {{ item.subject }} — {{ item.title }}</div>
+        {% empty %}
+          <p class="text-muted small mb-0">Aucun chapitre validé ce mois-ci.</p>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-12 col-lg-6">
+      <div class="card p-4 h-100">
+        <h2 class="h5 mb-3">Notes du mois</h2>
+        {% if grades %}
+          <table class="table table-sm small mb-0">
+            <thead><tr><th>Date</th><th>Matière</th><th>Type</th><th class="text-end">Note</th></tr></thead>
+            <tbody>
+              {% for grade in grades %}<tr><td>{{ grade.date|date:"d/m" }}</td><td>{{ grade.subject }}</td><td>{{ grade.get_kind_display }}</td><td class="text-end">{{ grade.score|floatformat:"-2" }}/{{ grade.out_of }}</td></tr>{% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="text-muted small mb-0">Aucune note enregistrée ce mois-ci.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-4 mt-4">
+    <h2 class="h5 mb-3">Avancement global du programme</h2>
+    {% include "premium/partials/progress.html" %}
+  </div>
+
+  <div class="card p-4 mt-4">
+    <h2 class="h5 mb-0">Séances du mois</h2>
+    {% for session in sessions %}
+      {% include "premium/partials/session_item.html" with readonly=True %}
+    {% empty %}
+      <p class="text-muted small mb-0 mt-2">Aucune séance ce mois-ci.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

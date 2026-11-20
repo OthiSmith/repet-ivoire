@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Suivi Premium pour {{ tutoring_request.child_first_name }} — {{ SITE_NAME }}{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container" style="max-width: 900px;">
+    <a href="{% url 'tutoring:request_detail' tutoring_request.pk %}" class="d-inline-block mb-3"><i class="bi bi-arrow-left" aria-hidden="true"></i> Ma demande</a>
+    <span class="badge rounded-pill badge-premium mb-2"><i class="bi bi-star-fill" aria-hidden="true"></i> Suivi Premium</span>
+    <h1 class="h3 mb-4">Suivre les progrès de {{ tutoring_request.child_first_name }}</h1>
+
+    {% if subscription.status == "ACTIVE" and not subscription.is_expired %}
+      <div class="alert alert-success">Le suivi est actif jusqu'au {{ subscription.ends_on|date:"j F Y" }}.
+        <a href="{% url 'premium:tracking' subscription.pk %}" class="alert-link">Ouvrir le suivi</a></div>
+    {% elif subscription.status == "REQUESTED" %}
+      <div class="alert alert-info">
+        <strong>Demande reçue ({{ subscription.months_requested }} mois).</strong> {{ payment_instructions }}
+      </div>
+    {% elif tutoring_request.status != "MATCHED" %}
+      <div class="alert alert-info">Le suivi Premium s'active une fois votre répétiteur choisi.</div>
+    {% endif %}
+
+    <div class="card p-4 mb-4">
+      {% include "premium/partials/benefits.html" %}
+    </div>
+
+    {% if tutoring_request.status == "MATCHED" and subscription.status != "REQUESTED" and not subscription.is_current %}
+      <form method="post" class="card p-4" novalidate>
+        {% csrf_token %}
+        <h2 class="h5">{% if subscription.is_expired %}Renouveler le suivi{% else %}Activer le suivi Premium{% endif %}</h2>
+        <p class="text-muted mb-3">{% if price %}{{ price|intcomma }} FCFA par mois.{% else %}Notre équipe vous communique le tarif.{% endif %} Paiement par Mobile Money après votre demande.</p>
+        {{ form }}
+        <button type="submit" class="btn btn-accent">Demander l'activation</button>
+      </form>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

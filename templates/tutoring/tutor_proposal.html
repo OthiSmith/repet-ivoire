@@ -20,6 +20,13 @@
           <a href="mailto:{{ req.parent.email }}" class="btn btn-outline-light-blue"><i class="bi bi-envelope" aria-hidden="true"></i> {{ req.parent.email }}</a>
         </div>
       </div>
+      {% if req.premium.status == "ACTIVE" %}
+        <div class="card p-4 mb-4">
+          <span class="badge rounded-pill badge-premium align-self-start mb-2"><i class="bi bi-star-fill" aria-hidden="true"></i> Suivi Premium</span>
+          <p class="mb-3">La famille a choisi le suivi Premium : établissez le plan de travail et renseignez le cahier après chaque séance.</p>
+          <div><a href="{% url 'premium:tracking' req.premium.pk %}" class="btn btn-accent">Ouvrir le suivi</a></div>
+        </div>
+      {% endif %}
     {% endif %}
 
     <div class="card p-4 mb-4">

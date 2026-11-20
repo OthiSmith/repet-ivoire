@@ -10,6 +10,8 @@
           <a class="nav-link {% if current == 'dashboard' %}active{% endif %}" href="{% url 'backoffice:dashboard' %}"><i class="bi bi-speedometer2 me-1" aria-hidden="true"></i> Tableau de bord</a>
           <a class="nav-link {% if current == 'request_list' or current == 'request_detail' %}active{% endif %}" href="{% url 'backoffice:request_list' %}"><i class="bi bi-inbox me-1" aria-hidden="true"></i> Demandes</a>
           <a class="nav-link {% if current == 'tutor_list' or current == 'tutor_review' %}active{% endif %}" href="{% url 'backoffice:tutor_list' %}"><i class="bi bi-mortarboard me-1" aria-hidden="true"></i> Répétiteurs</a>
+          <a class="nav-link {% if current == 'premium_list' or current == 'premium_detail' %}active{% endif %}" href="{% url 'backoffice:premium_list' %}"><i class="bi bi-star me-1" aria-hidden="true"></i> Premium</a>
+          <a class="nav-link {% if current == 'curriculum' %}active{% endif %}" href="{% url 'backoffice:curriculum' %}"><i class="bi bi-list-check me-1" aria-hidden="true"></i> Programme</a>
           {% if user.is_superuser %}<a class="nav-link" href="{% url 'admin:index' %}"><i class="bi bi-tools me-1" aria-hidden="true"></i> Admin technique</a>{% endif %}
         </nav>
       </aside>

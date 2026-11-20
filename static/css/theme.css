@@ -121,6 +121,49 @@ h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 { color: var(--ri-navy); font-weight
 .bo-nav .nav-link { color: var(--ri-text); border-radius: 8px; }
 .bo-nav .nav-link.active { background: var(--ri-blue-light); color: var(--ri-blue); font-weight: 600; }
 
+/* ---- Suivi Premium ---- */
+.badge-premium { background: #FFF4E5; color: #9A5B13; font-weight: 700; }
+.status-CONFIRMED { background: rgba(30, 158, 106, .12); color: var(--ri-success); }
+.status-DISPUTED, .status-TUTOR_ABSENT { background: #FDECEC; color: #B42318; }
+.status-CHILD_ABSENT, .status-REQUESTED { background: #FFF4E5; color: #9A5B13; }
+.status-ACTIVE { background: rgba(30, 158, 106, .12); color: var(--ri-success); }
+
+/* Barre empilée d'avancement : segments séparés de 2px, extrémités arrondies. */
+.stacked-bar { display: flex; gap: 2px; height: 12px; border-radius: 6px; overflow: hidden; background: #fff; }
+.stacked-bar .seg { display: block; height: 100%; }
+.stacked-bar .seg:first-child { border-radius: 6px 0 0 6px; }
+.stacked-bar .seg:last-child { border-radius: 0 6px 6px 0; }
+.stacked-bar .seg:only-child { border-radius: 6px; }
+.seg-ACQUIRED { background: var(--ri-success); }
+.seg-IN_PROGRESS { background: var(--ri-blue); }
+.seg-TO_REVIEW { background: var(--ri-accent); }
+.seg-NOT_STARTED { background: #D5DCE6; }
+.legend-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: .25rem; vertical-align: -1px; }
+.plan-ACQUIRED { background: rgba(30, 158, 106, .12); color: var(--ri-success); }
+.plan-IN_PROGRESS { background: var(--ri-blue-light); color: var(--ri-blue); }
+.plan-TO_REVIEW { background: #FFF4E5; color: #9A5B13; }
+.plan-status { min-height: 32px; width: auto; }
+
+/* Courbe des notes : axes discrets, trait de 2px, points de 9px, cible de survol plus large. */
+.grade-chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+.grade-chart .grid { stroke: var(--ri-border); stroke-width: 1; }
+.grade-chart .grid-average { stroke: var(--ri-muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.grade-chart .axis-label { font-size: 10px; fill: var(--ri-muted); }
+.grade-chart .value-label { font-size: 11px; font-weight: 600; fill: var(--ri-text); }
+.grade-chart .grade-line { fill: none; stroke: var(--ri-blue); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.grade-chart .dot { fill: var(--ri-blue); stroke: #fff; stroke-width: 2; }
+.grade-chart .hit { fill: transparent; cursor: pointer; }
+.grade-chart .grade-point:hover .dot, .grade-chart .grade-point:focus .dot { r: 6; }
+.grade-chart .grade-point:focus { outline: none; }
+
+/* Impression du rapport mensuel */
+@media print {
+  .site-navbar, .site-footer, .whatsapp-float, .alert { display: none !important; }
+  body { background: #fff; }
+  .card { box-shadow: none; break-inside: avoid; }
+  .section { padding: 0; }
+}
+
 /* ---- Bouton WhatsApp flottant ---- */
 .whatsapp-float { position: fixed; right: 1rem; bottom: 1rem; z-index: 1030; width: 56px; height: 56px; border-radius: 50%; background: #25D366; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 1.75rem; box-shadow: var(--ri-shadow-hover); text-decoration: none; }
 .whatsapp-float:hover { background: #1EBE5A; color: #fff; }

@@ -50,6 +50,7 @@ def robots_txt(request):
         "Disallow: /espace-repetiteur/",
         "Disallow: /mon-compte/",
         "Disallow: /notifications/",
+        "Disallow: /suivi/",
         f"Sitemap: {request.build_absolute_uri('/sitemap.xml')}",
     ]
     return HttpResponse("\n".join(lines) + "\n", content_type="text/plain")

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Suivi Premium — {{ SITE_NAME }}{% endblock %}
+{% block meta_description %}Suivez la progression de votre enfant chapitre par chapitre, l'assiduité du répétiteur et les notes, avec un rapport chaque mois.{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container" style="max-width: 900px;">
+    <span class="badge rounded-pill badge-premium mb-3 px-3 py-2"><i class="bi bi-star-fill" aria-hidden="true"></i> Suivi Premium</span>
+    <h1 class="mb-3">Sachez exactement où en est votre enfant.</h1>
+    <p class="lead mb-4">Programme, séances, assiduité du répétiteur, notes : tout le suivi au même endroit, mis à jour après chaque cours.</p>
+    <p class="fw-semibold mb-4">
+      {% if price %}{{ price|intcomma }} FCFA par mois et par enfant{% else %}Tarif communiqué par notre équipe{% endif %}
+      <span class="fw-normal text-muted">· en complément des cours</span>
+    </p>
+    <a href="{% if user.is_authenticated and user.is_parent %}{% url 'tutoring:parent_dashboard' %}{% else %}{% url 'accounts:signup_parent' %}{% endif %}" class="btn btn-accent btn-lg">Commencer</a>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container" style="max-width: 900px;">
+    <h2 class="section-title mb-4">Ce que comprend le suivi</h2>
+    {% include "premium/partials/benefits.html" %}
+
+    <h2 class="section-title mt-5 mb-3">Comment l'activer ?</h2>
+    <ol>
+      <li>Trouvez votre répétiteur grâce à {{ SITE_NAME }}.</li>
+      <li>Depuis votre demande, cliquez sur « Activer le suivi Premium » et choisissez la durée.</li>
+      <li>Réglez par Mobile Money : le suivi est activé dès réception, pour vous et pour le répétiteur.</li>
+    </ol>
+  </div>
+</section>
+{% endblock %}

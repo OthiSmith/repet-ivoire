@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{# En-tête et onglets communs aux pages du suivi Premium. #}
+{% block content %}
+{% with req=tutoring_request current=request.resolver_match.url_name %}
+<section class="section pt-4">
+  <div class="container" style="max-width: 1040px;">
+    <a href="{% if role == 'parent' %}{% url 'tutoring:request_detail' req.pk %}{% elif role == 'tutor' %}{% url 'tutors:dashboard' %}{% else %}{% url 'backoffice:premium_detail' subscription.pk %}{% endif %}" class="d-inline-block mb-3 d-print-none">
+      <i class="bi bi-arrow-left" aria-hidden="true"></i> Retour
+    </a>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
+      <div>
+        <span class="badge rounded-pill badge-premium mb-1"><i class="bi bi-star-fill" aria-hidden="true"></i> Suivi Premium</span>
+        <h1 class="h3 mb-0">{{ req.child_first_name }} · {{ req.level }}</h1>
+        <p class="small text-muted mb-0">
+          {% if subscription.tutor %}Avec {{ subscription.tutor.user.get_full_name }} · {% endif %}
+          {% if subscription.is_expired %}<span class="text-danger">Suivi expiré le {{ subscription.ends_on|date:"j F Y" }}</span>
+          {% else %}Actif jusqu'au {{ subscription.ends_on|date:"j F Y" }}{% endif %}
+        </p>
+      </div>
+      {% block header_actions %}{% endblock %}
+    </div>
+    {% if subscription.is_expired and role == "parent" %}
+      <div class="alert alert-warning d-print-none">Votre suivi est expiré : l'historique reste consultable, mais plus rien ne peut être ajouté. <a href="{% url 'premium:offer' req.pk %}">Renouveler</a></div>
+    {% endif %}
+    <ul class="nav nav-tabs mb-4 d-print-none">
+      <li class="nav-item"><a class="nav-link {% if current == 'tracking' %}active{% endif %}" href="{% url 'premium:tracking' subscription.pk %}">Vue d'ensemble</a></li>
+      <li class="nav-item"><a class="nav-link {% if current == 'plan' %}active{% endif %}" href="{% url 'premium:plan' subscription.pk %}">Programme</a></li>
+      <li class="nav-item"><a class="nav-link {% if current == 'sessions' %}active{% endif %}" href="{% url 'premium:sessions' subscription.pk %}">Cahier de séances</a></li>
+      <li class="nav-item"><a class="nav-link {% if current == 'report' %}active{% endif %}" href="{% url 'premium:report' subscription.pk %}">Rapport mensuel</a></li>
+    </ul>
+    {% block tracking_content %}{% endblock %}
+  </div>
+</section>
+{% endwith %}
+{% endblock %}
